@@ -19,8 +19,10 @@ dist-ssr
 *.sln
 *.sw?
 
-# Environment variables
+# Environment variables - IMPORTANTE: NO SUBIR API KEYS
 .env
 .env.local
 .env.production
+.env.*.local
+
 
