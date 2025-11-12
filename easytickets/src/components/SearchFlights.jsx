@@ -62,7 +62,6 @@ const SearchFlights = () => {
     }));
   };
 
-  // Handler especial para los selectores de aeropuerto
   const handleOriginChange = (e) => {
     setSearchData(prev => ({
       ...prev,
@@ -78,41 +77,11 @@ const SearchFlights = () => {
   };
 
   const handleFlightSelect = (flight) => {
-    const message = `
-🎉 ¡Vuelo Seleccionado!
-
-✈️ Vuelo: ${flight.flightNumber}
-🏢 Aerolínea: ${flight.airline} (${flight.airlineCode})
-
-📍 RUTA DE IDA:
-   ${flight.departure.airport} → ${flight.arrival.airport}
-   Salida: ${flight.departure.time} (${flight.departure.date})
-   Llegada: ${flight.arrival.time} (${flight.arrival.date})
-   Duración: ${flight.duration}
-   Escalas: ${flight.stops === 0 ? 'Vuelo directo' : `${flight.stops} escala(s)`}
-
-${flight.hasReturn ? `
-📍 RUTA DE REGRESO:
-   ${flight.returnInfo.departure.airport} → ${flight.returnInfo.arrival.airport}
-   Salida: ${flight.returnInfo.departure.time}
-   Llegada: ${flight.returnInfo.arrival.time}
-   Duración: ${flight.returnInfo.duration}
-` : ''}
-
-💰 Precio Total: $${flight.priceDisplay} ${flight.currency}
-🎫 Clase: ${flight.class}
-
-${flight.co2Emissions ? `🌱 Emisiones CO₂: ${flight.co2Emissions} kg` : ''}
-
-⚠️ En la próxima fase se implementará el sistema de pago.
-    `.trim();
-
-    alert(message);
+    // Esta función ahora es manejada por el modal en FlightResults
+    console.log('Vuelo seleccionado:', flight);
   };
 
-  // Obtener fecha mínima (hoy)
   const today = new Date().toISOString().split('T')[0];
-  // Fecha mínima recomendada (15 días desde hoy)
   const recommendedMinDate = new Date();
   recommendedMinDate.setDate(recommendedMinDate.getDate() + 15);
   const recommendedMin = recommendedMinDate.toISOString().split('T')[0];
@@ -120,7 +89,6 @@ ${flight.co2Emissions ? `🌱 Emisiones CO₂: ${flight.co2Emissions} kg` : ''}
   return (
     <>
       <div id="buscar" className="bg-white rounded-2xl shadow-2xl p-6 md:p-8 -mt-16 relative z-10 max-w-6xl mx-auto">
-        {/* Trip Type Selector */}
         <div className="flex space-x-4 mb-6">
           <button
             type="button"
@@ -154,7 +122,6 @@ ${flight.co2Emissions ? `🌱 Emisiones CO₂: ${flight.co2Emissions} kg` : ''}
 
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-            {/* Origin - Con selector de aeropuerto dinámico */}
             <AirportSelector
               label="Origen"
               value={searchData.origin}
@@ -163,7 +130,6 @@ ${flight.co2Emissions ? `🌱 Emisiones CO₂: ${flight.co2Emissions} kg` : ''}
               required
             />
 
-            {/* Destination - Con selector de aeropuerto dinámico */}
             <AirportSelector
               label="Destino"
               value={searchData.destination}
@@ -174,7 +140,6 @@ ${flight.co2Emissions ? `🌱 Emisiones CO₂: ${flight.co2Emissions} kg` : ''}
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-            {/* Departure Date */}
             <div className="relative">
               <label className="block text-sm font-semibold text-gray-700 mb-2">
                 Fecha de Salida <span className="text-red-500">*</span>
@@ -196,7 +161,6 @@ ${flight.co2Emissions ? `🌱 Emisiones CO₂: ${flight.co2Emissions} kg` : ''}
               </p>
             </div>
 
-            {/* Return Date */}
             {tripType === 'roundTrip' && (
               <div className="relative">
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
@@ -217,7 +181,6 @@ ${flight.co2Emissions ? `🌱 Emisiones CO₂: ${flight.co2Emissions} kg` : ''}
               </div>
             )}
 
-            {/* Passengers */}
             <div className="relative">
               <label className="block text-sm font-semibold text-gray-700 mb-2">Pasajeros</label>
               <div className="relative">
@@ -237,7 +200,6 @@ ${flight.co2Emissions ? `🌱 Emisiones CO₂: ${flight.co2Emissions} kg` : ''}
               </div>
             </div>
 
-            {/* Class */}
             <div className="relative">
               <label className="block text-sm font-semibold text-gray-700 mb-2">Clase</label>
               <select
@@ -254,7 +216,6 @@ ${flight.co2Emissions ? `🌱 Emisiones CO₂: ${flight.co2Emissions} kg` : ''}
             </div>
           </div>
 
-          {/* Search Button */}
           <div className="flex justify-center">
             <button 
               type="submit" 
@@ -275,7 +236,6 @@ ${flight.co2Emissions ? `🌱 Emisiones CO₂: ${flight.co2Emissions} kg` : ''}
             </button>
           </div>
 
-          {/* Info Box */}
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 flex items-start space-x-3 mt-4">
             <AlertCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
             <div className="text-sm text-blue-800">
@@ -324,7 +284,11 @@ ${flight.co2Emissions ? `🌱 Emisiones CO₂: ${flight.co2Emissions} kg` : ''}
                   🎫 {searchData.class === 'economy' ? 'Económica' : searchData.class === 'business' ? 'Business' : searchData.class === 'first' ? 'Primera Clase' : 'Premium Economy'}
                 </p>
               </div>
-              <FlightResults flights={flights} onFlightSelect={handleFlightSelect} />
+              <FlightResults 
+                flights={flights} 
+                onFlightSelect={handleFlightSelect}
+                searchData={searchData}
+              />
             </>
           ) : (
             <div className="text-center py-16 bg-white rounded-xl shadow-lg">
@@ -345,3 +309,4 @@ ${flight.co2Emissions ? `🌱 Emisiones CO₂: ${flight.co2Emissions} kg` : ''}
 };
 
 export default SearchFlights;
+
