@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Search, MapPin, Calendar, Users, Loader2, AlertCircle } from 'lucide-react';
 import { searchFlights } from '../services/flightAPI';
 import FlightResults from './FlightResults';
+import AirportSelector from './AirportSelector';
 
 const SearchFlights = () => {
   const [tripType, setTripType] = useState('roundTrip');
@@ -143,46 +144,24 @@ ${flight.co2Emissions ? `🌱 Emisiones CO₂: ${flight.co2Emissions} kg` : ''}
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
             {/* Origin */}
-            <div className="relative">
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Origen <span className="text-red-500">*</span>
-              </label>
-              <div className="relative">
-                <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                <input
-                  type="text"
-                  name="origin"
-                  value={searchData.origin}
-                  onChange={handleChange}
-                  placeholder="LAX, BOG, MDE..."
-                  className="input-field pl-10 uppercase"
-                  maxLength="3"
-                  required
-                />
-              </div>
-              <p className="text-xs text-gray-500 mt-1">Código IATA de 3 letras</p>
-            </div>
+            <AirportSelector
+              value={searchData.origin}
+              onChange={(airportCode) => setSearchData(prev => ({ ...prev, origin: airportCode }))}
+              label="Origen"
+              placeholder="Bogotá, Los Ángeles, Medellín..."
+              iconColor="text-gray-400"
+              required
+            />
 
             {/* Destination */}
-            <div className="relative">
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Destino <span className="text-red-500">*</span>
-              </label>
-              <div className="relative">
-                <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-secondary w-5 h-5" />
-                <input
-                  type="text"
-                  name="destination"
-                  value={searchData.destination}
-                  onChange={handleChange}
-                  placeholder="JFK, MIA, CTG..."
-                  className="input-field pl-10 uppercase"
-                  maxLength="3"
-                  required
-                />
-              </div>
-              <p className="text-xs text-gray-500 mt-1">Código IATA de 3 letras</p>
-            </div>
+            <AirportSelector
+              value={searchData.destination}
+              onChange={(airportCode) => setSearchData(prev => ({ ...prev, destination: airportCode }))}
+              label="Destino"
+              placeholder="Nueva York, Miami, Cartagena..."
+              iconColor="text-secondary"
+              required
+            />
 
             {/* Departure Date */}
             <div className="relative">
@@ -288,9 +267,9 @@ ${flight.co2Emissions ? `🌱 Emisiones CO₂: ${flight.co2Emissions} kg` : ''}
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 flex items-start space-x-3">
             <AlertCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
             <div className="text-sm text-blue-800">
-              <p className="font-semibold mb-1">💡 Códigos de aeropuerto comunes:</p>
-              <p><strong>Colombia:</strong> BOG (Bogotá), MDE (Medellín), CTG (Cartagena), CLO (Cali)</p>
-              <p><strong>USA:</strong> LAX (Los Ángeles), JFK (Nueva York), MIA (Miami), ORD (Chicago)</p>
+              <p className="font-semibold mb-1">💡 Cómo buscar:</p>
+              <p>Escribe el nombre de la ciudad o aeropuerto y selecciona de la lista.</p>
+              <p className="mt-1"><strong>Ejemplos:</strong> Bogotá, Los Ángeles, Nueva York, Miami, Medellín, Cartagena</p>
             </div>
           </div>
         </form>
