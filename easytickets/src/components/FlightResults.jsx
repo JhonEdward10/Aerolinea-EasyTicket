@@ -1,218 +1,369 @@
-import React from 'react';
-import { Plane, Clock, Calendar, ArrowRight, MapPin, Leaf } from 'lucide-react';
+import React, { useState, useMemo } from 'react';
+import { Plane, Clock, TrendingDown, Zap, Users, Award, Star, Check } from 'lucide-react';
 
 const FlightResults = ({ flights, onFlightSelect }) => {
-  if (!flights || flights.length === 0) {
-    return (
-      <div className="text-center py-16 bg-white rounded-xl shadow-lg">
-        <div className="text-6xl mb-4">🔍</div>
-        <h3 className="text-2xl font-bold text-gray-700 mb-2">No se encontraron vuelos</h3>
-        <p className="text-gray-500">
-          Intenta modificar tus criterios de búsqueda o verifica los códigos de aeropuerto
-        </p>
-      </div>
+  const [sortBy, setSortBy] = useState('best');
+
+  /**
+   * Calcula el precio "antes" (precio real + $80)
+   */
+  const calculateOriginalPrice = (currentPrice) => {
+    return Math.round(currentPrice + 80);
+  };
+
+  /**
+   * Calcula el descuento porcentual
+   */
+  const calculateDiscount = (originalPrice, currentPrice) => {
+    const discount = ((originalPrice - currentPrice) / originalPrice) * 100;
+    return Math.round(discount);
+  };
+
+  /**
+   * Determina la categoría del vuelo
+   */
+  const getFlightBadge = (flight, index, sortedFlights) => {
+    // Vuelo más barato = Deal of the Week
+    const cheapestFlight = sortedFlights.reduce((min, f) => 
+      f.price < min.price ? f : min, sortedFlights[0]
     );
+    
+    if (flight.id === cheapestFlight.id) {
+      return { type: 'deal', label: 'Deal of the Week', icon: Award, color: 'bg-blue-600' };
+    }
+
+    // Vuelo más rápido (menos duración)
+    const fastestFlight = sortedFlights.reduce((fastest, f) => {
+      const currentDuration = parseDuration(f.duration);
+      const fastestDuration = parseDuration(fastest.duration);
+      return currentDuration < fastestDuration ? f : fastest;
+    }, sortedFlights[0]);
+
+    if (flight.id === fastestFlight.id) {
+      return { type: 'fastest', label: 'Fastest', icon: Zap, color: 'bg-orange-600' };
+    }
+
+    // Best Seller (segundo más barato)
+    const pricesSorted = [...sortedFlights].sort((a, b) => a.price - b.price);
+    if (flight.id === pricesSorted[1]?.id) {
+      return { type: 'bestseller', label: 'Best Seller', icon: Star, color: 'bg-red-600' };
+    }
+
+    // Popular (vuelo directo o con menos escalas)
+    if (flight.stops === 0) {
+      return { type: 'popular', label: 'Non-Stop', icon: Plane, color: 'bg-green-600' };
+    }
+
+    return null;
+  };
+
+  /**
+   * Parsea duración en minutos para comparar
+   */
+  const parseDuration = (duration) => {
+    if (!duration || duration === 'N/A') return 999999;
+    
+    const parts = duration.match(/(\d+)h?\s*(\d+)?m?/);
+    if (!parts) return 999999;
+    
+    const hours = parseInt(parts[1] || 0);
+    const minutes = parseInt(parts[2] || 0);
+    return hours * 60 + minutes;
+  };
+
+  /**
+   * Ordenar vuelos según criterio
+   */
+  const sortedFlights = useMemo(() => {
+    let sorted = [...flights];
+
+    switch (sortBy) {
+      case 'cheapest':
+        sorted.sort((a, b) => a.price - b.price);
+        break;
+      case 'fastest':
+        sorted.sort((a, b) => parseDuration(a.duration) - parseDuration(b.duration));
+        break;
+      case 'fewest-stops':
+        sorted.sort((a, b) => a.stops - b.stops);
+        break;
+      case 'best':
+      default:
+        // Mejor = balance entre precio y duración
+        sorted.sort((a, b) => {
+          const scoreA = (a.price / 100) + (parseDuration(a.duration) / 10) + (a.stops * 50);
+          const scoreB = (b.price / 100) + (parseDuration(b.duration) / 10) + (b.stops * 50);
+          return scoreA - scoreB;
+        });
+    }
+
+    return sorted;
+  }, [flights, sortBy]);
+
+  /**
+   * Separar vuelo destacado del resto
+   */
+  const cheapestFlight = useMemo(() => {
+    return sortedFlights.reduce((min, f) => 
+      f.price < min.price ? f : min, sortedFlights[0]
+    );
+  }, [sortedFlights]);
+
+  const otherFlights = useMemo(() => {
+    return sortedFlights.filter(f => f.id !== cheapestFlight.id);
+  }, [sortedFlights, cheapestFlight]);
+
+  if (flights.length === 0) {
+    return null;
   }
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold text-gray-800">
-          {flights.length} vuelo{flights.length !== 1 ? 's' : ''} encontrado{flights.length !== 1 ? 's' : ''}
-        </h2>
-        <div className="flex items-center space-x-4">
-          <span className="text-sm text-gray-600">Ordenar por:</span>
-          <select className="px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-primary">
-            <option>Mejor opción</option>
-            <option>Precio más bajo</option>
-            <option>Más rápido</option>
-            <option>Menos escalas</option>
-          </select>
+    <div className="space-y-8">
+      {/* Filtros */}
+      <div className="bg-white rounded-xl shadow-lg p-6">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-bold text-gray-800">
+            Ordenar por:
+          </h3>
+          <div className="text-sm text-gray-600">
+            {flights.length} vuelo{flights.length !== 1 ? 's' : ''} encontrado{flights.length !== 1 ? 's' : ''}
+          </div>
+        </div>
+        
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <button
+            onClick={() => setSortBy('best')}
+            className={`px-4 py-3 rounded-lg font-semibold transition-all ${
+              sortBy === 'best'
+                ? 'bg-primary text-white shadow-lg'
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+            }`}
+          >
+            ⭐ Mejor Opción
+          </button>
+          <button
+            onClick={() => setSortBy('cheapest')}
+            className={`px-4 py-3 rounded-lg font-semibold transition-all ${
+              sortBy === 'cheapest'
+                ? 'bg-primary text-white shadow-lg'
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+            }`}
+          >
+            💰 Más Económico
+          </button>
+          <button
+            onClick={() => setSortBy('fastest')}
+            className={`px-4 py-3 rounded-lg font-semibold transition-all ${
+              sortBy === 'fastest'
+                ? 'bg-primary text-white shadow-lg'
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+            }`}
+          >
+            ⚡ Más Rápido
+          </button>
+          <button
+            onClick={() => setSortBy('fewest-stops')}
+            className={`px-4 py-3 rounded-lg font-semibold transition-all ${
+              sortBy === 'fewest-stops'
+                ? 'bg-primary text-white shadow-lg'
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+            }`}
+          >
+            🎯 Menos Escalas
+          </button>
         </div>
       </div>
 
-      {flights.map((flight) => (
-        <div
-          key={flight.id}
-          className="bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 p-6 border-2 border-transparent hover:border-primary"
-        >
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
-            {/* Airline Logo & Info */}
-            <div className="lg:col-span-2 flex flex-col items-center">
-              <img
-                src={flight.logo}
-                alt={flight.airline}
-                className="h-12 w-auto mb-2 object-contain"
-                onError={(e) => {
-                  e.target.src = `https://images.kiwi.com/airlines/64/${flight.airlineCode}.png`;
-                }}
-              />
-              <p className="text-sm font-semibold text-gray-700 text-center">{flight.airline}</p>
-              <p className="text-xs text-gray-500">{flight.flightNumber}</p>
-              <p className="text-xs text-gray-400 mt-1">{flight.airlineCode}</p>
-            </div>
-
-            {/* Flight Route - IDA */}
-            <div className="lg:col-span-7">
-              <div className="flex items-center justify-between mb-4">
-                {/* Departure */}
-                <div className="flex-1">
-                  <div className="flex items-center space-x-2 mb-1">
-                    <MapPin className="w-4 h-4 text-primary" />
-                    <p className="text-sm font-medium text-gray-600">{flight.departure.airport}</p>
-                  </div>
-                  <p className="text-3xl font-bold text-gray-900">{flight.departure.time}</p>
-                  <p className="text-sm text-gray-500">{formatDate(flight.departure.date)}</p>
-                  <p className="text-xs text-gray-400">{flight.departure.airportName}</p>
-                  {flight.departure.terminal && flight.departure.terminal !== 'N/A' && (
-                    <p className="text-xs text-gray-400">Terminal {flight.departure.terminal}</p>
-                  )}
-                </div>
-
-                {/* Duration & Stops */}
-                <div className="flex-1 px-4">
-                  <div className="flex flex-col items-center">
-                    <div className="flex items-center space-x-2 text-gray-500 mb-2">
-                      <Clock className="w-4 h-4" />
-                      <span className="text-sm font-medium">{flight.duration}</span>
-                    </div>
-                    
-                    <div className="w-full flex items-center relative">
-                      <div className="flex-1 border-t-2 border-gray-300 relative">
-                        {flight.stops > 0 && (
-                          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                            <div className="bg-white px-2">
-                              <div className="w-3 h-3 rounded-full bg-secondary border-2 border-white"></div>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                      <Plane className="w-5 h-5 text-primary transform rotate-90 mx-2" />
-                    </div>
-                    
-                    <p className="text-xs text-gray-500 mt-2">
-                      {flight.stops === 0 ? '✈️ Directo' : `${flight.stops} escala${flight.stops > 1 ? 's' : ''}`}
-                    </p>
-                  </div>
-                </div>
-
-                {/* Arrival */}
-                <div className="flex-1 text-right">
-                  <div className="flex items-center justify-end space-x-2 mb-1">
-                    <p className="text-sm font-medium text-gray-600">{flight.arrival.airport}</p>
-                    <MapPin className="w-4 h-4 text-secondary" />
-                  </div>
-                  <p className="text-3xl font-bold text-gray-900">{flight.arrival.time}</p>
-                  <p className="text-sm text-gray-500">{formatDate(flight.arrival.date)}</p>
-                  <p className="text-xs text-gray-400">{flight.arrival.airportName}</p>
-                  {flight.arrival.terminal && flight.arrival.terminal !== 'N/A' && (
-                    <p className="text-xs text-gray-400">Terminal {flight.arrival.terminal}</p>
-                  )}
-                </div>
-              </div>
-
-              {/* Return Flight Info */}
-              {flight.hasReturn && flight.returnInfo && (
-                <div className="pt-4 border-t border-gray-200">
-                  <p className="text-xs text-gray-500 mb-2 font-semibold">🔄 VUELO DE REGRESO</p>
-                  <div className="flex items-center justify-between text-sm">
-                    <div>
-                      <span className="font-medium">{flight.returnInfo.departure.airport}</span>
-                      <span className="text-gray-500 mx-2">{flight.returnInfo.departure.time}</span>
-                    </div>
-                    <div className="flex items-center space-x-2 text-gray-500">
-                      <Clock className="w-3 h-3" />
-                      <span className="text-xs">{flight.returnInfo.duration}</span>
-                    </div>
-                    <div>
-                      <span className="text-gray-500 mx-2">{flight.returnInfo.arrival.time}</span>
-                      <span className="font-medium">{flight.returnInfo.arrival.airport}</span>
-                    </div>
-                  </div>
-                  <p className="text-xs text-gray-400 mt-1 text-center">
-                    {flight.returnInfo.stops === 0 ? 'Directo' : `${flight.returnInfo.stops} escala(s)`}
-                  </p>
-                </div>
-              )}
-            </div>
-
-            {/* Price & Book Button */}
-            <div className="lg:col-span-3 flex flex-col items-center justify-center border-l-0 lg:border-l-2 border-gray-200 pl-0 lg:pl-6">
-              <div className="text-center mb-4">
-                <p className="text-sm text-gray-500 mb-1">Precio total</p>
-                <p className="text-4xl font-bold text-primary">
-                  ${flight.priceDisplay}
-                  <span className="text-lg text-gray-500 ml-1">{flight.currency}</span>
-                </p>
-                <p className="text-xs text-gray-500 mt-1">{flight.class}</p>
-              </div>
-              
-              <button
-                onClick={() => onFlightSelect(flight)}
-                disabled={!flight.available}
-                className={`w-full flex items-center justify-center space-x-2 px-6 py-3 rounded-lg font-semibold transition-all duration-300 ${
-                  flight.available
-                    ? 'bg-secondary hover:bg-orange-600 text-white transform hover:scale-105'
-                    : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                }`}
-              >
-                <span>{flight.available ? 'Seleccionar' : 'No disponible'}</span>
-                {flight.available && <ArrowRight className="w-5 h-5" />}
-              </button>
-
-              {/* CO2 Emissions */}
-              {flight.co2Emissions && (
-                <div className="mt-3 flex items-center space-x-1 text-xs text-green-600">
-                  <Leaf className="w-3 h-3" />
-                  <span>{flight.co2Emissions} kg CO₂</span>
-                </div>
-              )}
-            </div>
+      {/* VUELO DESTACADO - Deal of the Week */}
+      <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-2xl shadow-2xl p-8 border-4 border-blue-200">
+        {/* Badge de Deal of the Week */}
+        <div className="flex items-center space-x-2 mb-4">
+          <div className="bg-blue-600 text-white px-4 py-2 rounded-full font-bold text-sm flex items-center space-x-2">
+            <Award className="w-5 h-5" />
+            <span>Deal of the Week</span>
           </div>
-
-          {/* Additional Info */}
-          <div className="mt-4 pt-4 border-t border-gray-200">
-            <div className="flex flex-wrap gap-4 text-sm text-gray-600">
-              <div className="flex items-center space-x-2">
-                <Calendar className="w-4 h-4 text-primary" />
-                <span>Cambio de fecha flexible</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <span className="text-green-600">✓</span>
-                <span>1 equipaje de mano incluido</span>
-              </div>
-              {flight.aircraft && flight.aircraft !== 'N/A' && (
-                <div className="flex items-center space-x-2">
-                  <span className="text-gray-400">✈</span>
-                  <span>Aeronave: {flight.aircraft}</span>
-                </div>
-              )}
-            </div>
+          <div className="bg-green-500 text-white px-3 py-1 rounded-full font-semibold text-xs">
+            {calculateDiscount(calculateOriginalPrice(cheapestFlight.price), cheapestFlight.price)}% OFF
           </div>
         </div>
-      ))}
+
+        <FlightCard 
+          flight={cheapestFlight} 
+          onSelect={onFlightSelect}
+          isHighlighted={true}
+          originalPrice={calculateOriginalPrice(cheapestFlight.price)}
+        />
+      </div>
+
+      {/* Más ofertas de nuestros partners */}
+      {otherFlights.length > 0 && (
+        <div>
+          <h2 className="text-2xl font-bold text-gray-800 mb-6">
+            Más ofertas de nuestros partners
+          </h2>
+          
+          <div className="grid grid-cols-1 gap-6">
+            {otherFlights.map((flight, index) => {
+              const badge = getFlightBadge(flight, index, sortedFlights);
+              
+              return (
+                <div key={flight.id} className="relative">
+                  {/* Badge si aplica */}
+                  {badge && (
+                    <div className="absolute -top-3 left-4 z-10">
+                      <div className={`${badge.color} text-white px-4 py-2 rounded-full font-bold text-sm flex items-center space-x-2 shadow-lg`}>
+                        <badge.icon className="w-4 h-4" />
+                        <span>{badge.label}</span>
+                      </div>
+                    </div>
+                  )}
+                  
+                  <FlightCard 
+                    flight={flight} 
+                    onSelect={onFlightSelect}
+                    isHighlighted={false}
+                    originalPrice={calculateOriginalPrice(flight.price)}
+                  />
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
 /**
- * Formatea la fecha en un formato legible en español
+ * Componente individual de tarjeta de vuelo
  */
-const formatDate = (dateString) => {
-  if (!dateString) return '';
-  
-  try {
-    const date = new Date(dateString);
-    const options = { 
-      weekday: 'short', 
-      month: 'short', 
-      day: 'numeric' 
-    };
-    
-    return date.toLocaleDateString('es-ES', options);
-  } catch (error) {
-    return dateString;
-  }
+const FlightCard = ({ flight, onSelect, isHighlighted = false, originalPrice }) => {
+  const discount = ((originalPrice - flight.price) / originalPrice) * 100;
+
+  return (
+    <div className={`bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden ${
+      isHighlighted ? 'border-4 border-blue-400' : 'border-2 border-gray-200'
+    }`}>
+      <div className="p-6">
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+          {/* Información del vuelo */}
+          <div className="flex-1 space-y-4">
+            {/* Aerolínea */}
+            <div className="flex items-center space-x-4">
+              <img 
+                src={flight.logo} 
+                alt={flight.airline}
+                className="w-12 h-12 object-contain"
+                onError={(e) => {
+                  e.target.src = `https://via.placeholder.com/48x48/2563eb/ffffff?text=${flight.airlineCode}`;
+                }}
+              />
+              <div>
+                <div className="font-bold text-gray-900 text-lg">{flight.airline}</div>
+                <div className="text-sm text-gray-500">Vuelo {flight.flightNumber}</div>
+              </div>
+            </div>
+
+            {/* Ruta y horarios */}
+            <div className="flex items-center justify-between">
+              {/* Salida */}
+              <div className="text-center">
+                <div className="text-3xl font-bold text-gray-900">{flight.departure.time}</div>
+                <div className="text-sm font-semibold text-gray-700">{flight.departure.airport}</div>
+                <div className="text-xs text-gray-500">{flight.departure.date}</div>
+              </div>
+
+              {/* Duración y escalas */}
+              <div className="flex-1 mx-4">
+                <div className="relative">
+                  <div className="border-t-2 border-gray-300 relative">
+                    <Plane className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-primary w-6 h-6 bg-white px-1" />
+                  </div>
+                  <div className="text-center mt-2">
+                    <div className="text-sm font-semibold text-gray-600">
+                      <Clock className="w-4 h-4 inline mr-1" />
+                      {flight.duration}
+                    </div>
+                    <div className="text-xs text-gray-500">
+                      {flight.stops === 0 ? (
+                        <span className="text-green-600 font-semibold">Directo</span>
+                      ) : (
+                        <span>{flight.stops} escala{flight.stops > 1 ? 's' : ''}</span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Llegada */}
+              <div className="text-center">
+                <div className="text-3xl font-bold text-gray-900">{flight.arrival.time}</div>
+                <div className="text-sm font-semibold text-gray-700">{flight.arrival.airport}</div>
+                <div className="text-xs text-gray-500">{flight.arrival.date}</div>
+              </div>
+            </div>
+
+            {/* Beneficios */}
+            {isHighlighted && (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-2 pt-4 border-t border-gray-200">
+                <div className="flex items-center space-x-2 text-sm text-gray-700">
+                  <Check className="w-5 h-5 text-green-500" />
+                  <span>Lost Baggage Protection</span>
+                </div>
+                <div className="flex items-center space-x-2 text-sm text-gray-700">
+                  <Check className="w-5 h-5 text-green-500" />
+                  <span>Refund Assurance</span>
+                </div>
+                <div className="flex items-center space-x-2 text-sm text-gray-700">
+                  <Check className="w-5 h-5 text-green-500" />
+                  <span>Book Now, Pay Later</span>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Precio y botón */}
+          <div className={`${isHighlighted ? 'lg:w-80' : 'lg:w-64'} text-center space-y-4 border-l-0 lg:border-l-2 border-gray-200 lg:pl-6`}>
+            {/* Precio anterior tachado */}
+            <div className="text-gray-500">
+              <span className="text-xl line-through">${originalPrice}</span>
+            </div>
+
+            {/* Precio actual destacado */}
+            <div>
+              <div className={`${isHighlighted ? 'text-5xl' : 'text-4xl'} font-bold text-primary`}>
+                ${flight.price}
+                <span className="text-xl align-top">*</span>
+              </div>
+              <div className="text-sm text-gray-600 mt-1">
+                Total, por persona
+              </div>
+            </div>
+
+            {/* Información adicional */}
+            <div className="text-xs text-gray-500 space-y-1">
+              <div>🎫 {flight.class}</div>
+              {flight.co2Emissions && (
+                <div>🌱 {flight.co2Emissions} kg CO₂</div>
+              )}
+            </div>
+
+            {/* Botón de selección */}
+            <button
+              onClick={() => onSelect(flight)}
+              className={`w-full py-4 rounded-lg font-bold text-lg transition-all ${
+                isHighlighted
+                  ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 shadow-xl'
+                  : 'bg-secondary text-white hover:bg-orange-600 shadow-lg'
+              }`}
+            >
+              {isHighlighted ? '🏆 Reservar Mejor Oferta' : 'Seleccionar Vuelo'}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default FlightResults;

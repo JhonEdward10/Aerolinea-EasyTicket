@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Search, MapPin, Calendar, Users, Loader2, AlertCircle } from 'lucide-react';
+import { Search, Calendar, Users, Loader2, AlertCircle } from 'lucide-react';
 import { searchFlights } from '../services/flightAPI';
 import FlightResults from './FlightResults';
+import AirportSelector from './AirportSelector';
 
 const SearchFlights = () => {
   const [tripType, setTripType] = useState('roundTrip');
@@ -59,14 +60,21 @@ const SearchFlights = () => {
       ...prev,
       [name]: value
     }));
+  };
 
-    // Si cambia el tipo de viaje a solo ida, limpiar fecha de regreso
-    if (name === 'tripType' && value === 'oneWay') {
-      setSearchData(prev => ({
-        ...prev,
-        returnDate: ''
-      }));
-    }
+  // Handler especial para los selectores de aeropuerto
+  const handleOriginChange = (e) => {
+    setSearchData(prev => ({
+      ...prev,
+      origin: e.target.value
+    }));
+  };
+
+  const handleDestinationChange = (e) => {
+    setSearchData(prev => ({
+      ...prev,
+      destination: e.target.value
+    }));
   };
 
   const handleFlightSelect = (flight) => {
@@ -104,6 +112,10 @@ ${flight.co2Emissions ? `🌱 Emisiones CO₂: ${flight.co2Emissions} kg` : ''}
 
   // Obtener fecha mínima (hoy)
   const today = new Date().toISOString().split('T')[0];
+  // Fecha mínima recomendada (15 días desde hoy)
+  const recommendedMinDate = new Date();
+  recommendedMinDate.setDate(recommendedMinDate.getDate() + 15);
+  const recommendedMin = recommendedMinDate.toISOString().split('T')[0];
 
   return (
     <>
@@ -141,49 +153,27 @@ ${flight.co2Emissions ? `🌱 Emisiones CO₂: ${flight.co2Emissions} kg` : ''}
         </div>
 
         <form onSubmit={handleSubmit}>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            {/* Origin - Con selector de aeropuerto dinámico */}
+            <AirportSelector
+              label="Origen"
+              value={searchData.origin}
+              onChange={handleOriginChange}
+              placeholder="Buscar ciudad o aeropuerto de origen..."
+              required
+            />
+
+            {/* Destination - Con selector de aeropuerto dinámico */}
+            <AirportSelector
+              label="Destino"
+              value={searchData.destination}
+              onChange={handleDestinationChange}
+              placeholder="Buscar ciudad o aeropuerto de destino..."
+              required
+            />
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-            {/* Origin */}
-            <div className="relative">
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Origen <span className="text-red-500">*</span>
-              </label>
-              <div className="relative">
-                <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                <input
-                  type="text"
-                  name="origin"
-                  value={searchData.origin}
-                  onChange={handleChange}
-                  placeholder="LAX, BOG, MDE..."
-                  className="input-field pl-10 uppercase"
-                  maxLength="3"
-                  required
-                />
-              </div>
-              <p className="text-xs text-gray-500 mt-1">Código IATA de 3 letras</p>
-            </div>
-
-            {/* Destination */}
-            <div className="relative">
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Destino <span className="text-red-500">*</span>
-              </label>
-              <div className="relative">
-                <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-secondary w-5 h-5" />
-                <input
-                  type="text"
-                  name="destination"
-                  value={searchData.destination}
-                  onChange={handleChange}
-                  placeholder="JFK, MIA, CTG..."
-                  className="input-field pl-10 uppercase"
-                  maxLength="3"
-                  required
-                />
-              </div>
-              <p className="text-xs text-gray-500 mt-1">Código IATA de 3 letras</p>
-            </div>
-
             {/* Departure Date */}
             <div className="relative">
               <label className="block text-sm font-semibold text-gray-700 mb-2">
@@ -201,6 +191,9 @@ ${flight.co2Emissions ? `🌱 Emisiones CO₂: ${flight.co2Emissions} kg` : ''}
                   required
                 />
               </div>
+              <p className="text-xs text-gray-500 mt-1">
+                💡 Recomendado: {recommendedMin} o después
+              </p>
             </div>
 
             {/* Return Date */}
@@ -223,9 +216,7 @@ ${flight.co2Emissions ? `🌱 Emisiones CO₂: ${flight.co2Emissions} kg` : ''}
                 </div>
               </div>
             )}
-          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
             {/* Passengers */}
             <div className="relative">
               <label className="block text-sm font-semibold text-gray-700 mb-2">Pasajeros</label>
@@ -261,36 +252,39 @@ ${flight.co2Emissions ? `🌱 Emisiones CO₂: ${flight.co2Emissions} kg` : ''}
                 <option value="first">Primera Clase</option>
               </select>
             </div>
+          </div>
 
-            {/* Search Button */}
-            <div className="flex items-end">
-              <button 
-                type="submit" 
-                disabled={loading}
-                className="btn-primary w-full flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {loading ? (
-                  <>
-                    <Loader2 className="w-5 h-5 animate-spin" />
-                    <span>Buscando...</span>
-                  </>
-                ) : (
-                  <>
-                    <Search className="w-5 h-5" />
-                    <span>Buscar Vuelos</span>
-                  </>
-                )}
-              </button>
-            </div>
+          {/* Search Button */}
+          <div className="flex justify-center">
+            <button 
+              type="submit" 
+              disabled={loading}
+              className="btn-primary px-12 py-4 text-lg flex items-center justify-center space-x-3 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {loading ? (
+                <>
+                  <Loader2 className="w-6 h-6 animate-spin" />
+                  <span>Buscando vuelos...</span>
+                </>
+              ) : (
+                <>
+                  <Search className="w-6 h-6" />
+                  <span>Buscar Vuelos</span>
+                </>
+              )}
+            </button>
           </div>
 
           {/* Info Box */}
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 flex items-start space-x-3">
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 flex items-start space-x-3 mt-4">
             <AlertCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
             <div className="text-sm text-blue-800">
-              <p className="font-semibold mb-1">💡 Códigos de aeropuerto comunes:</p>
-              <p><strong>Colombia:</strong> BOG (Bogotá), MDE (Medellín), CTG (Cartagena), CLO (Cali)</p>
-              <p><strong>USA:</strong> LAX (Los Ángeles), JFK (Nueva York), MIA (Miami), ORD (Chicago)</p>
+              <p className="font-semibold mb-1">💡 Consejos para mejores resultados:</p>
+              <ul className="list-disc list-inside space-y-1">
+                <li>Escribe el nombre de la ciudad o código del aeropuerto (BOG, LAX, etc.)</li>
+                <li>Busca vuelos con al menos 15 días de anticipación</li>
+                <li>Los vuelos entre semana suelen ser más económicos</li>
+              </ul>
             </div>
           </div>
         </form>
@@ -340,7 +334,7 @@ ${flight.co2Emissions ? `🌱 Emisiones CO₂: ${flight.co2Emissions} kg` : ''}
                 No hay vuelos disponibles para la ruta {searchData.origin} → {searchData.destination}
               </p>
               <p className="text-gray-400 text-sm">
-                Intenta modificar tus fechas o verifica los códigos de aeropuerto
+                Intenta modificar tus fechas o selecciona otros aeropuertos
               </p>
             </div>
           )}
