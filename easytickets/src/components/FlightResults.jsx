@@ -170,43 +170,43 @@ const FlightResults = ({ flights, onFlightSelect, searchData }) => {
             {/* VUELO (8 columnas = 66%) */}
             <div className="lg:col-span-8">
               <div className="bg-white rounded-xl shadow-lg border-4 border-blue-400 h-full">
-                <div className="p-4 h-full flex flex-col justify-between">
+                <div className="p-3 sm:p-4 h-full flex flex-col justify-between">
                   {/* Contenido del vuelo - TODO VERTICAL */}
-                  <div className="space-y-4">
+                  <div className="space-y-3 sm:space-y-4">
                     {/* Aerolínea */}
-                    <div className="flex items-center space-x-3">
+                    <div className="flex items-center space-x-2 sm:space-x-3">
                       <img 
                         src={cheapestFlight.logo} 
                         alt={cheapestFlight.airline}
-                        className="w-12 h-12 object-contain"
+                        className="w-10 h-10 sm:w-12 sm:h-12 object-contain flex-shrink-0"
                         onError={(e) => {
                           e.target.src = `https://via.placeholder.com/48x48/2563eb/ffffff?text=${cheapestFlight.airlineCode}`;
                         }}
                       />
-                      <div>
-                        <div className="font-bold text-gray-900 text-lg">{cheapestFlight.airline}</div>
-                        <div className="text-sm text-gray-500">Vuelo {cheapestFlight.flightNumber}</div>
+                      <div className="min-w-0">
+                        <div className="font-bold text-gray-900 text-base sm:text-lg truncate">{cheapestFlight.airline}</div>
+                        <div className="text-xs sm:text-sm text-gray-500 truncate">Vuelo {cheapestFlight.flightNumber}</div>
                       </div>
                     </div>
 
                     {/* Ruta y horarios */}
                     <div className="flex items-center justify-between">
                       {/* Salida */}
-                      <div className="text-center">
-                        <div className="text-3xl font-bold text-gray-900">{cheapestFlight.departure.time}</div>
-                        <div className="text-sm font-semibold text-gray-700">{cheapestFlight.departure.airport}</div>
+                      <div className="text-center flex-shrink-0">
+                        <div className="text-2xl sm:text-3xl font-bold text-gray-900">{cheapestFlight.departure.time}</div>
+                        <div className="text-xs sm:text-sm font-semibold text-gray-700">{cheapestFlight.departure.airport}</div>
                         <div className="text-xs text-gray-500">{cheapestFlight.departure.date}</div>
                       </div>
 
                       {/* Duración y escalas */}
-                      <div className="flex-1 mx-4">
+                      <div className="flex-1 mx-2 sm:mx-4 min-w-0">
                         <div className="relative">
                           <div className="border-t-2 border-gray-300 relative">
-                            <Plane className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-primary w-6 h-6 bg-white px-1" />
+                            <Plane className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-primary w-5 h-5 sm:w-6 sm:h-6 bg-white px-1" />
                           </div>
-                          <div className="text-center mt-2">
-                            <div className="text-sm font-semibold text-gray-600">
-                              <Clock className="w-4 h-4 inline mr-1" />
+                          <div className="text-center mt-1 sm:mt-2">
+                            <div className="text-xs sm:text-sm font-semibold text-gray-600">
+                              <Clock className="w-3 h-3 sm:w-4 sm:h-4 inline mr-1" />
                               {cheapestFlight.duration}
                             </div>
                             <div className="text-xs text-gray-500">
@@ -221,26 +221,26 @@ const FlightResults = ({ flights, onFlightSelect, searchData }) => {
                       </div>
 
                       {/* Llegada */}
-                      <div className="text-center">
-                        <div className="text-3xl font-bold text-gray-900">{cheapestFlight.arrival.time}</div>
-                        <div className="text-sm font-semibold text-gray-700">{cheapestFlight.arrival.airport}</div>
+                      <div className="text-center flex-shrink-0">
+                        <div className="text-2xl sm:text-3xl font-bold text-gray-900">{cheapestFlight.arrival.time}</div>
+                        <div className="text-xs sm:text-sm font-semibold text-gray-700">{cheapestFlight.arrival.airport}</div>
                         <div className="text-xs text-gray-500">{cheapestFlight.arrival.date}</div>
                       </div>
                     </div>
 
                     {/* Beneficios */}
-                    <div className="flex flex-wrap gap-3 pt-3 border-t border-gray-200">
-                      <div className="flex items-center space-x-2 text-xs text-gray-700">
-                        <Check className="w-4 h-4 text-green-500" />
-                        <span>Lost Baggage Protection</span>
+                    <div className="flex flex-wrap gap-2 sm:gap-3 pt-3 border-t border-gray-200">
+                      <div className="flex items-center space-x-1 sm:space-x-2 text-xs text-gray-700">
+                        <Check className="w-3 h-3 sm:w-4 sm:h-4 text-green-500 flex-shrink-0" />
+                        <span className="whitespace-nowrap">Lost Baggage Protection</span>
                       </div>
-                      <div className="flex items-center space-x-2 text-xs text-gray-700">
-                        <Check className="w-4 h-4 text-green-500" />
-                        <span>Refund Assurance</span>
+                      <div className="flex items-center space-x-1 sm:space-x-2 text-xs text-gray-700">
+                        <Check className="w-3 h-3 sm:w-4 sm:h-4 text-green-500 flex-shrink-0" />
+                        <span className="whitespace-nowrap">Refund Assurance</span>
                       </div>
-                      <div className="flex items-center space-x-2 text-xs text-gray-700">
-                        <Check className="w-4 h-4 text-green-500" />
-                        <span>Book Now, Pay Later</span>
+                      <div className="flex items-center space-x-1 sm:space-x-2 text-xs text-gray-700">
+                        <Check className="w-3 h-3 sm:w-4 sm:h-4 text-green-500 flex-shrink-0" />
+                        <span className="whitespace-nowrap">Book Now, Pay Later</span>
                       </div>
                     </div>
                   </div>
@@ -250,14 +250,14 @@ const FlightResults = ({ flights, onFlightSelect, searchData }) => {
                     <div className="text-center">
                       {/* Precio anterior tachado */}
                       <div className="text-gray-500">
-                        <span className="text-xl line-through">${calculateOriginalPrice(cheapestFlight.price)}</span>
+                        <span className="text-lg sm:text-xl line-through">${calculateOriginalPrice(cheapestFlight.price)}</span>
                       </div>
 
                       {/* Precio actual destacado */}
                       <div className="mt-2">
-                        <div className="text-5xl font-bold text-primary">
+                        <div className="text-4xl sm:text-5xl font-bold text-primary">
                           ${cheapestFlight.price}
-                          <span className="text-xl align-top">*</span>
+                          <span className="text-lg sm:text-xl align-top">*</span>
                         </div>
                         <div className="text-sm text-gray-600 mt-1">
                           Total, por persona
@@ -431,7 +431,7 @@ const FlightCard = ({ flight, onSelect, isHighlighted = false, originalPrice }) 
     <div className={`bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden ${
       isHighlighted ? 'border-4 border-blue-400' : 'border-2 border-gray-200'
     }`}>
-      <div className="p-6">
+      <div className="p-4">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
           {/* Información del vuelo */}
           <div className="flex-1 space-y-4">
