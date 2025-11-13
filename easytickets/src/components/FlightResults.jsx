@@ -170,118 +170,116 @@ const FlightResults = ({ flights, onFlightSelect, searchData }) => {
             {/* VUELO (8 columnas = 66%) */}
             <div className="lg:col-span-8">
               <div className="bg-white rounded-xl shadow-lg border-4 border-blue-400 h-full">
-                <div className="p-4 h-full flex flex-col">
-                  <div className="flex flex-col lg:flex-row lg:items-stretch lg:justify-between gap-4 flex-1">
-                    {/* Información del vuelo */}
-                    <div className="flex-1 flex flex-col justify-between space-y-4">
-                      {/* Aerolínea */}
-                      <div className="flex items-center space-x-3">
-                        <img 
-                          src={cheapestFlight.logo} 
-                          alt={cheapestFlight.airline}
-                          className="w-12 h-12 object-contain"
-                          onError={(e) => {
-                            e.target.src = `https://via.placeholder.com/48x48/2563eb/ffffff?text=${cheapestFlight.airlineCode}`;
-                          }}
-                        />
-                        <div>
-                          <div className="font-bold text-gray-900 text-lg">{cheapestFlight.airline}</div>
-                          <div className="text-sm text-gray-500">Vuelo {cheapestFlight.flightNumber}</div>
-                        </div>
-                      </div>
-
-                      {/* Ruta y horarios */}
-                      <div className="flex items-center justify-between flex-1">
-                        {/* Salida */}
-                        <div className="text-center">
-                          <div className="text-3xl font-bold text-gray-900">{cheapestFlight.departure.time}</div>
-                          <div className="text-sm font-semibold text-gray-700">{cheapestFlight.departure.airport}</div>
-                          <div className="text-xs text-gray-500">{cheapestFlight.departure.date}</div>
-                        </div>
-
-                        {/* Duración y escalas */}
-                        <div className="flex-1 mx-4">
-                          <div className="relative">
-                            <div className="border-t-2 border-gray-300 relative">
-                              <Plane className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-primary w-6 h-6 bg-white px-1" />
-                            </div>
-                            <div className="text-center mt-2">
-                              <div className="text-sm font-semibold text-gray-600">
-                                <Clock className="w-4 h-4 inline mr-1" />
-                                {cheapestFlight.duration}
-                              </div>
-                              <div className="text-xs text-gray-500">
-                                {cheapestFlight.stops === 0 ? (
-                                  <span className="text-green-600 font-semibold">Directo</span>
-                                ) : (
-                                  <span>{cheapestFlight.stops} escala{cheapestFlight.stops > 1 ? 's' : ''}</span>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Llegada */}
-                        <div className="text-center">
-                          <div className="text-3xl font-bold text-gray-900">{cheapestFlight.arrival.time}</div>
-                          <div className="text-sm font-semibold text-gray-700">{cheapestFlight.arrival.airport}</div>
-                          <div className="text-xs text-gray-500">{cheapestFlight.arrival.date}</div>
-                        </div>
-                      </div>
-
-                      {/* Beneficios */}
-                      <div className="flex flex-wrap gap-3 pt-3 border-t border-gray-200">
-                        <div className="flex items-center space-x-2 text-xs text-gray-700">
-                          <Check className="w-4 h-4 text-green-500" />
-                          <span>Lost Baggage Protection</span>
-                        </div>
-                        <div className="flex items-center space-x-2 text-xs text-gray-700">
-                          <Check className="w-4 h-4 text-green-500" />
-                          <span>Refund Assurance</span>
-                        </div>
-                        <div className="flex items-center space-x-2 text-xs text-gray-700">
-                          <Check className="w-4 h-4 text-green-500" />
-                          <span>Book Now, Pay Later</span>
-                        </div>
+                <div className="p-4 h-full flex flex-col justify-between">
+                  {/* Contenido del vuelo - TODO VERTICAL */}
+                  <div className="space-y-4">
+                    {/* Aerolínea */}
+                    <div className="flex items-center space-x-3">
+                      <img 
+                        src={cheapestFlight.logo} 
+                        alt={cheapestFlight.airline}
+                        className="w-12 h-12 object-contain"
+                        onError={(e) => {
+                          e.target.src = `https://via.placeholder.com/48x48/2563eb/ffffff?text=${cheapestFlight.airlineCode}`;
+                        }}
+                      />
+                      <div>
+                        <div className="font-bold text-gray-900 text-lg">{cheapestFlight.airline}</div>
+                        <div className="text-sm text-gray-500">Vuelo {cheapestFlight.flightNumber}</div>
                       </div>
                     </div>
 
-                    {/* Precio y botón */}
-                    <div className="lg:w-56 flex flex-col justify-between text-center space-y-3 border-l-0 lg:border-l-2 border-gray-200 lg:pl-4">
-                      <div className="flex-1 flex flex-col justify-center space-y-3">
-                        {/* Precio anterior tachado */}
-                        <div className="text-gray-500">
-                          <span className="text-xl line-through">${calculateOriginalPrice(cheapestFlight.price)}</span>
-                        </div>
+                    {/* Ruta y horarios */}
+                    <div className="flex items-center justify-between">
+                      {/* Salida */}
+                      <div className="text-center">
+                        <div className="text-3xl font-bold text-gray-900">{cheapestFlight.departure.time}</div>
+                        <div className="text-sm font-semibold text-gray-700">{cheapestFlight.departure.airport}</div>
+                        <div className="text-xs text-gray-500">{cheapestFlight.departure.date}</div>
+                      </div>
 
-                        {/* Precio actual destacado */}
-                        <div>
-                          <div className="text-5xl font-bold text-primary">
-                            ${cheapestFlight.price}
-                            <span className="text-xl align-top">*</span>
+                      {/* Duración y escalas */}
+                      <div className="flex-1 mx-4">
+                        <div className="relative">
+                          <div className="border-t-2 border-gray-300 relative">
+                            <Plane className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-primary w-6 h-6 bg-white px-1" />
                           </div>
-                          <div className="text-sm text-gray-600 mt-1">
-                            Total, por persona
+                          <div className="text-center mt-2">
+                            <div className="text-sm font-semibold text-gray-600">
+                              <Clock className="w-4 h-4 inline mr-1" />
+                              {cheapestFlight.duration}
+                            </div>
+                            <div className="text-xs text-gray-500">
+                              {cheapestFlight.stops === 0 ? (
+                                <span className="text-green-600 font-semibold">Directo</span>
+                              ) : (
+                                <span>{cheapestFlight.stops} escala{cheapestFlight.stops > 1 ? 's' : ''}</span>
+                              )}
+                            </div>
                           </div>
-                        </div>
-
-                        {/* Información adicional */}
-                        <div className="text-xs text-gray-500 space-y-1">
-                          <div>🎫 {cheapestFlight.class}</div>
-                          {cheapestFlight.co2Emissions && (
-                            <div>🌱 {cheapestFlight.co2Emissions} kg CO₂</div>
-                          )}
                         </div>
                       </div>
 
-                      {/* Botón de selección */}
-                      <button
-                        onClick={() => handleFlightSelection(cheapestFlight)}
-                        className="w-full py-3 rounded-lg font-bold text-sm transition-all bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 shadow-xl"
-                      >
-                        🏆 Reservar Mejor Oferta
-                      </button>
+                      {/* Llegada */}
+                      <div className="text-center">
+                        <div className="text-3xl font-bold text-gray-900">{cheapestFlight.arrival.time}</div>
+                        <div className="text-sm font-semibold text-gray-700">{cheapestFlight.arrival.airport}</div>
+                        <div className="text-xs text-gray-500">{cheapestFlight.arrival.date}</div>
+                      </div>
                     </div>
+
+                    {/* Beneficios */}
+                    <div className="flex flex-wrap gap-3 pt-3 border-t border-gray-200">
+                      <div className="flex items-center space-x-2 text-xs text-gray-700">
+                        <Check className="w-4 h-4 text-green-500" />
+                        <span>Lost Baggage Protection</span>
+                      </div>
+                      <div className="flex items-center space-x-2 text-xs text-gray-700">
+                        <Check className="w-4 h-4 text-green-500" />
+                        <span>Refund Assurance</span>
+                      </div>
+                      <div className="flex items-center space-x-2 text-xs text-gray-700">
+                        <Check className="w-4 h-4 text-green-500" />
+                        <span>Book Now, Pay Later</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* PRECIO Y BOTÓN ABAJO */}
+                  <div className="space-y-3 pt-4 border-t-2 border-gray-200">
+                    <div className="text-center">
+                      {/* Precio anterior tachado */}
+                      <div className="text-gray-500">
+                        <span className="text-xl line-through">${calculateOriginalPrice(cheapestFlight.price)}</span>
+                      </div>
+
+                      {/* Precio actual destacado */}
+                      <div className="mt-2">
+                        <div className="text-5xl font-bold text-primary">
+                          ${cheapestFlight.price}
+                          <span className="text-xl align-top">*</span>
+                        </div>
+                        <div className="text-sm text-gray-600 mt-1">
+                          Total, por persona
+                        </div>
+                      </div>
+
+                      {/* Información adicional */}
+                      <div className="text-xs text-gray-500 space-y-1 mt-2">
+                        <div>🎫 {cheapestFlight.class}</div>
+                        {cheapestFlight.co2Emissions && (
+                          <div>🌱 {cheapestFlight.co2Emissions} kg CO₂</div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Botón de selección */}
+                    <button
+                      onClick={() => handleFlightSelection(cheapestFlight)}
+                      className="w-full py-3 rounded-lg font-bold text-sm transition-all bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 shadow-xl"
+                    >
+                      🏆 Reservar Mejor Oferta
+                    </button>
                   </div>
                 </div>
               </div>
@@ -715,10 +713,11 @@ const BookingModal = ({ flight, originalPrice, onClose, searchData }) => {
             </div>
           </form>
         </div>
-      </div>s
+      </div>
     </div>
   );
 };
 
 export default FlightResults;
+
 
