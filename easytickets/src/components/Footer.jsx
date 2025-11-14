@@ -13,7 +13,7 @@ const Footer = () => {
               <span className="text-2xl font-bold">Easy<span className="text-secondary">Tickets</span></span>
             </div>
             <p className="text-gray-300 mb-4">
-              Tu compañero de viaje confiable para encontrar los mejores vuelos al mejor precio.
+              Your trusted travel partner for finding the best flights at the best price.
             </p>
             <div className="flex space-x-4">
               <a href="#" className="hover:text-secondary transition-colors duration-300">
@@ -33,26 +33,26 @@ const Footer = () => {
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-lg font-bold mb-4">Enlaces Rápidos</h3>
+            <h3 className="text-lg font-bold mb-4">Quick Links</h3>
             <ul className="space-y-2">
               <li>
                 <a href="#inicio" className="text-gray-300 hover:text-secondary transition-colors duration-300">
-                  Inicio
+                  Home
                 </a>
               </li>
               <li>
                 <a href="#buscar" className="text-gray-300 hover:text-secondary transition-colors duration-300">
-                  Buscar Vuelos
+                  Search Flights
                 </a>
               </li>
               <li>
                 <a href="#" className="text-gray-300 hover:text-secondary transition-colors duration-300">
-                  Mis Reservas
+                  My Reservations
                 </a>
               </li>
               <li>
                 <a href="#" className="text-gray-300 hover:text-secondary transition-colors duration-300">
-                  Preguntas Frecuentes
+                  Frequently Asked Questions
                 </a>
               </li>
             </ul>
@@ -60,26 +60,26 @@ const Footer = () => {
 
           {/* Customer Service */}
           <div>
-            <h3 className="text-lg font-bold mb-4">Servicio al Cliente</h3>
+            <h3 className="text-lg font-bold mb-4">Customer service</h3>
             <ul className="space-y-2">
               <li>
                 <a href="#" className="text-gray-300 hover:text-secondary transition-colors duration-300">
-                  Centro de Ayuda
+                  Help Center
                 </a>
               </li>
               <li>
                 <a href="#" className="text-gray-300 hover:text-secondary transition-colors duration-300">
-                  Políticas de Cancelación
+                  Cancellation Policies
                 </a>
               </li>
               <li>
                 <a href="#" className="text-gray-300 hover:text-secondary transition-colors duration-300">
-                  Términos y Condiciones
+                  Terms and Conditions
                 </a>
               </li>
               <li>
                 <a href="#" className="text-gray-300 hover:text-secondary transition-colors duration-300">
-                  Política de Privacidad
+                  Privacy Policy
                 </a>
               </li>
             </ul>
@@ -87,7 +87,7 @@ const Footer = () => {
 
           {/* Contact Info */}
           <div>
-            <h3 className="text-lg font-bold mb-4">Contacto</h3>
+            <h3 className="text-lg font-bold mb-4">Contact</h3>
             <ul className="space-y-3">
               <li className="flex items-start space-x-3">
                 <MapPin className="w-5 h-5 text-secondary flex-shrink-0 mt-1" />
@@ -120,14 +120,14 @@ const Footer = () => {
         <div className="border-t border-gray-600 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <p className="text-gray-300 text-sm text-center md:text-left">
-              © 2025 EasyTickets. Todos los derechos reservados.
+              © 2025 EasyTickets. All rights reserved.
             </p>
             <div className="flex items-center space-x-6">
               <a href="#" className="text-gray-300 hover:text-secondary transition-colors duration-300 text-sm">
-                Términos de Uso
+                Terms of Use
               </a>
               <a href="#" className="text-gray-300 hover:text-secondary transition-colors duration-300 text-sm">
-                Política de Privacidad
+                Privacy Policy
               </a>
             </div>
           </div>

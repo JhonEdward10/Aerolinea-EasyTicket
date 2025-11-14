@@ -102,7 +102,7 @@ const SearchFlights = () => {
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
             }`}
           >
-            ✈️ Ida y Vuelta
+            ✈️ Round Trip
           </button>
           <button
             type="button"
@@ -116,14 +116,14 @@ const SearchFlights = () => {
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
             }`}
           >
-            ➡️ Solo Ida
+            ➡️ One Way
           </button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <AirportSelector
-              label="Origen"
+              label="From"
               value={searchData.origin}
               onChange={handleOriginChange}
               placeholder="Buscar ciudad o aeropuerto de origen..."
@@ -131,7 +131,7 @@ const SearchFlights = () => {
             />
 
             <AirportSelector
-              label="Destino"
+              label="To"
               value={searchData.destination}
               onChange={handleDestinationChange}
               placeholder="Buscar ciudad o aeropuerto de destino..."
@@ -142,7 +142,7 @@ const SearchFlights = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
             <div className="relative">
               <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Fecha de Salida <span className="text-red-500">*</span>
+                Departure Date <span className="text-red-500">*</span>
               </label>
               <div className="relative">
                 <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -157,14 +157,14 @@ const SearchFlights = () => {
                 />
               </div>
               <p className="text-xs text-gray-500 mt-1">
-                💡 Recomendado: {recommendedMin} o después
+                💡 Recommended: {recommendedMin} or later
               </p>
             </div>
 
             {tripType === 'roundTrip' && (
               <div className="relative">
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Fecha de Regreso <span className="text-red-500">*</span>
+                  Return Date <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
                   <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -182,7 +182,7 @@ const SearchFlights = () => {
             )}
 
             <div className="relative">
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Pasajeros</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Passengers</label>
               <div className="relative">
                 <Users className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                 <select
@@ -201,17 +201,17 @@ const SearchFlights = () => {
             </div>
 
             <div className="relative">
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Clase</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Class</label>
               <select
                 name="class"
                 value={searchData.class}
                 onChange={handleChange}
                 className="input-field"
               >
-                <option value="economy">Económica</option>
+                <option value="economy">Economic</option>
                 <option value="premium">Premium Economy</option>
                 <option value="business">Business</option>
-                <option value="first">Primera Clase</option>
+                <option value="first">First Class</option>
               </select>
             </div>
           </div>
@@ -225,12 +225,12 @@ const SearchFlights = () => {
               {loading ? (
                 <>
                   <Loader2 className="w-6 h-6 animate-spin" />
-                  <span>Buscando vuelos...</span>
+                  <span>Looking for flights...</span>
                 </>
               ) : (
                 <>
                   <Search className="w-6 h-6" />
-                  <span>Buscar Vuelos</span>
+                  <span>Search Flights</span>
                 </>
               )}
             </button>
@@ -239,11 +239,11 @@ const SearchFlights = () => {
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 flex items-start space-x-3 mt-4">
             <AlertCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
             <div className="text-sm text-blue-800">
-              <p className="font-semibold mb-1">💡 Consejos para mejores resultados:</p>
+              <p className="font-semibold mb-1">💡 Tips for better results:</p>
               <ul className="list-disc list-inside space-y-1">
-                <li>Escribe el nombre de la ciudad o código del aeropuerto (BOG, LAX, etc.)</li>
-                <li>Busca vuelos con al menos 15 días de anticipación</li>
-                <li>Los vuelos entre semana suelen ser más económicos</li>
+                <li>Write the city name or airport code (BOG, LAX, etc.)</li>
+                <li>Search for flights at least 15 days in advance.</li>
+                <li>Flights during the week are usually cheaper</li>
               </ul>
             </div>
           </div>
@@ -256,19 +256,19 @@ const SearchFlights = () => {
           {loading ? (
             <div className="text-center py-16">
               <div className="inline-block animate-spin rounded-full h-16 w-16 border-4 border-primary border-t-secondary"></div>
-              <p className="mt-4 text-gray-600 text-lg">Buscando los mejores vuelos con Google Flights...</p>
-              <p className="mt-2 text-gray-500 text-sm">Esto puede tomar unos segundos</p>
+              <p className="mt-4 text-gray-600 text-lg">Looking for the best flights with Google Flights...</p>
+              <p className="mt-2 text-gray-500 text-sm">This may take a few seconds</p>
             </div>
           ) : error ? (
             <div className="bg-red-50 border-2 border-red-200 rounded-xl p-8 text-center">
               <div className="text-6xl mb-4">❌</div>
-              <h3 className="text-2xl font-bold text-red-700 mb-2">Error al buscar vuelos</h3>
+              <h3 className="text-2xl font-bold text-red-700 mb-2">Error when searching for flights</h3>
               <p className="text-red-600 mb-4">{error}</p>
               <button 
                 onClick={() => setError(null)}
                 className="btn-primary"
               >
-                Intentar de nuevo
+                Try again
               </button>
             </div>
           ) : flights.length > 0 ? (
@@ -280,8 +280,8 @@ const SearchFlights = () => {
                 <p className="text-gray-600">
                   📅 {searchData.departureDate} 
                   {searchData.returnDate && ` - ${searchData.returnDate}`} • 
-                  👥 {searchData.passengers} pasajero{searchData.passengers > 1 ? 's' : ''} • 
-                  🎫 {searchData.class === 'economy' ? 'Económica' : searchData.class === 'business' ? 'Business' : searchData.class === 'first' ? 'Primera Clase' : 'Premium Economy'}
+                  👥 {searchData.passengers} Passenger{searchData.passengers > 1 ? 's' : ''} • 
+                  🎫 {searchData.class === 'economy' ? 'Economic' : searchData.class === 'business' ? 'Business' : searchData.class === 'first' ? 'First Class' : 'Premium Economy'}
                 </p>
               </div>
               <FlightResults 
@@ -293,12 +293,12 @@ const SearchFlights = () => {
           ) : (
             <div className="text-center py-16 bg-white rounded-xl shadow-lg">
               <div className="text-6xl mb-4">😔</div>
-              <h3 className="text-2xl font-bold text-gray-700 mb-2">No encontramos vuelos</h3>
+              <h3 className="text-2xl font-bold text-gray-700 mb-2">We can't find flights</h3>
               <p className="text-gray-500 mb-4">
-                No hay vuelos disponibles para la ruta {searchData.origin} → {searchData.destination}
+                There are no flights available for this route {searchData.origin} → {searchData.destination}
               </p>
               <p className="text-gray-400 text-sm">
-                Intenta modificar tus fechas o selecciona otros aeropuertos
+                Try changing your dates or selecting other airports
               </p>
             </div>
           )}

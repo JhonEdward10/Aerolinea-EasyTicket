@@ -40,10 +40,10 @@ const Flights = ({ onBack }) => {
             className="flex items-center space-x-2 mb-6 hover:text-secondary transition-colors duration-300"
           >
             <ArrowLeft className="w-5 h-5" />
-            <span>Volver al inicio</span>
+            <span>Back to top</span>
           </button>
-          <h1 className="text-3xl md:text-4xl font-bold">Busca tu Vuelo Ideal</h1>
-          <p className="text-gray-200 mt-2">Encuentra las mejores opciones para tu viaje</p>
+          <h1 className="text-3xl md:text-4xl font-bold">Find your ideal flight</h1>
+          <p className="text-gray-200 mt-2">Find the best options for your trip</p>
         </div>
       </div>
 
@@ -57,7 +57,7 @@ const Flights = ({ onBack }) => {
         {loading ? (
           <div className="text-center py-16">
             <div className="inline-block animate-spin rounded-full h-16 w-16 border-4 border-primary border-t-secondary"></div>
-            <p className="mt-4 text-gray-600 text-lg">Buscando los mejores vuelos para ti...</p>
+            <p className="mt-4 text-gray-600 text-lg">Looking for the best flights for you...</p>
           </div>
         ) : flights.length > 0 ? (
           <>
@@ -69,7 +69,7 @@ const Flights = ({ onBack }) => {
                 <p className="text-gray-600">
                   {searchData.departureDate} 
                   {searchData.returnDate && ` - ${searchData.returnDate}`} • 
-                  {searchData.passengers} pasajero{searchData.passengers > 1 ? 's' : ''} • 
+                  {searchData.passengers} Passenger{searchData.passengers > 1 ? 's' : ''} • 
                   Clase {searchData.class}
                 </p>
               </div>
@@ -79,17 +79,17 @@ const Flights = ({ onBack }) => {
         ) : searchData ? (
           <div className="text-center py-16 bg-white rounded-xl shadow-lg">
             <div className="text-6xl mb-4">😔</div>
-            <h3 className="text-2xl font-bold text-gray-700 mb-2">No encontramos vuelos</h3>
+            <h3 className="text-2xl font-bold text-gray-700 mb-2">We can't find flights</h3>
             <p className="text-gray-500">
-              Intenta modificar tus criterios de búsqueda para ver más opciones
+              Try modifying your search criteria to see more options
             </p>
           </div>
         ) : (
           <div className="text-center py-16 bg-white rounded-xl shadow-lg">
             <div className="text-6xl mb-4">✈️</div>
-            <h3 className="text-2xl font-bold text-gray-700 mb-2">Comienza tu búsqueda</h3>
+            <h3 className="text-2xl font-bold text-gray-700 mb-2">Start your search</h3>
             <p className="text-gray-500">
-              Ingresa tu origen, destino y fechas para encontrar los mejores vuelos
+              Enter your origin, destination and dates to find the best flights
             </p>
           </div>
         )}
