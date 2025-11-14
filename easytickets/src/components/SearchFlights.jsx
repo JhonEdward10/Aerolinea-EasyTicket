@@ -126,7 +126,7 @@ const SearchFlights = () => {
               label="From"
               value={searchData.origin}
               onChange={handleOriginChange}
-              placeholder="Buscar ciudad o aeropuerto de origen..."
+              placeholder="Find your departure city or airport..."
               required
             />
 
@@ -134,7 +134,7 @@ const SearchFlights = () => {
               label="To"
               value={searchData.destination}
               onChange={handleDestinationChange}
-              placeholder="Buscar ciudad o aeropuerto de destino..."
+              placeholder="Search for destination city or airport..."
               required
             />
           </div>
