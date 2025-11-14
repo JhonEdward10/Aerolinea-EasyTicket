@@ -92,14 +92,14 @@ const Footer = () => {
               <li className="flex items-start space-x-3">
                 <MapPin className="w-5 h-5 text-secondary flex-shrink-0 mt-1" />
                 <span className="text-gray-300">
-                  Calle 123 #45-67<br />
-                  Bogotá, Colombia
+                  5731 Kirby Dr. <br />
+                  Houston, TX
                 </span>
               </li>
               <li className="flex items-center space-x-3">
                 <Phone className="w-5 h-5 text-secondary" />
                 <a href="tel:+573001234567" className="text-gray-300 hover:text-secondary transition-colors duration-300">
-                  +57 300 123 4567
+                  +1 (405) 316-9901
                 </a>
               </li>
               <li className="flex items-center space-x-3">
@@ -109,10 +109,10 @@ const Footer = () => {
                 </a>
               </li>
             </ul>
-            <div className="mt-4">
+            {/* <div className="mt-4">
               <p className="text-sm text-gray-300 mb-2">Horario de Atención:</p>
               <p className="text-gray-300 font-semibold">24/7 - Siempre disponibles</p>
-            </div>
+            </div> */}
           </div>
         </div>
 
