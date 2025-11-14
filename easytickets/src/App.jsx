@@ -2,6 +2,7 @@ import React from 'react';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Home from './pages/Home';
+import WhatsAppFloat from './components/Whatsappfloat';
 import './App.css';
 
 function App() {
@@ -12,6 +13,7 @@ function App() {
         <Home />
       </main>
       <Footer />
+      <WhatsAppFloat />
     </div>
   );
 }
