@@ -20,12 +20,12 @@ const Hero = () => {
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-6">
             <button className="btn-primary flex items-center space-x-2 text-lg">
-              <span>Search for Flights</span>
+              <a href="#buscar"><span>Search for Flights</span></a>
               <ArrowRight className="w-5 h-5" />
             </button>
             
             <button className="bg-white text-primary hover:bg-gray-100 font-semibold py-3 px-6 rounded-lg transition-all duration-300 text-lg">
-              View Offers
+              <a href="#buscar">View Offers</a>
             </button>
           </div>
 

@@ -15,7 +15,7 @@ const FlightResults = ({ flights, onFlightSelect, searchData }) => {
   });
 
   /**
-   * Obtener número de WhatsApp en el montaje del componente
+   * envia numero de whatsapp flotante
    */
   useEffect(() => {
     const fetchWhatsAppNumber = async () => {
@@ -34,14 +34,14 @@ const FlightResults = ({ flights, onFlightSelect, searchData }) => {
   }, []);
 
   /**
-   * Calcular el precio "antes" (precio real + $80)
+   * Calculate antes del precio real
    */
   const calculateOriginalPrice = (currentPrice) => {
     return Math.round(currentPrice + 80);
   };
 
   /**
-   * Calcular porcentaje de descuento
+   * Calcular descuento porcentual
    */
   const calculateDiscount = (originalPrice, currentPrice) => {
     const discount = ((originalPrice - currentPrice) / originalPrice) * 100;
@@ -49,7 +49,7 @@ const FlightResults = ({ flights, onFlightSelect, searchData }) => {
   };
 
   /**
-   * Convierte la duración a minutos para comparar.
+   * Duración en minutos para comparación
    */
   const parseDuration = (duration) => {
     if (!duration || duration === 'N/A') return 999999;
@@ -61,7 +61,7 @@ const FlightResults = ({ flights, onFlightSelect, searchData }) => {
   };
 
   /**
-   * Ordenar vuelos por criterios
+   * Criterios de vuelo ordenados
    */
   const sortedFlights = useMemo(() => {
     let sorted = [...flights];
@@ -89,7 +89,7 @@ const FlightResults = ({ flights, onFlightSelect, searchData }) => {
   }, [flights, sortBy]);
 
   /**
-   * Vuelo destacado separado del resto
+   * Separa mejor opcion
    */
   const cheapestFlight = useMemo(() => {
     return sortedFlights.reduce((min, f) => 
@@ -102,13 +102,13 @@ const FlightResults = ({ flights, onFlightSelect, searchData }) => {
   }, [sortedFlights, cheapestFlight]);
 
   /**
-   * Gestiona el envío del formulario de cotización
+   * Handle en el formato de formulario de cotización
    */
   const handleQuoteSubmit = async (e) => {
     e.preventDefault();
     
     try {
-      // Prepara datos para enviar
+      // Prepara datos de envio al backend
       const formData = new FormData();
       formData.append('from', quoteForm.from);
       formData.append('to', quoteForm.to);
@@ -119,7 +119,7 @@ const FlightResults = ({ flights, onFlightSelect, searchData }) => {
       formData.append('precio', `${cheapestFlight.price} USD`);
       formData.append('hora_vuelo', `${cheapestFlight.departure.date} ${cheapestFlight.departure.time}`);
 
-      // Envia el POST request
+      // Envia POST request
       const response = await fetch('https://easyticketsapp.com/back/vuelo.php', {
         method: 'POST',
         body: formData
@@ -127,7 +127,7 @@ const FlightResults = ({ flights, onFlightSelect, searchData }) => {
 
       if (response.ok) {
         alert('✅ Quote submitted successfully!\n\nWe will contact you soon.');
-        // Limpiar formulario
+        // Limpia formulario
         setQuoteForm({
           from: searchData?.origin || '',
           to: searchData?.destination || '',
@@ -145,7 +145,7 @@ const FlightResults = ({ flights, onFlightSelect, searchData }) => {
   };
 
   /**
-   * Seleccionar vuelo abre ventana emergente
+   * Handle Vuelo seleccion (opens modal)
    */
   const handleFlightSelection = (flight) => {
     setSelectedFlight(flight);
@@ -207,9 +207,9 @@ const FlightResults = ({ flights, onFlightSelect, searchData }) => {
           </div>
         </div>
 
-        {/* VUELO DESTACADO CON FORMA*/}
+        {/* FEATURED FLIGHT WITH FORM */}
         <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-2xl shadow-2xl p-4 md:p-5 border-4 border-blue-200">
-          {/* Insignia de Oferta de la Semana */}
+          {/* Deal of the Week Badge */}
           <div className="flex items-center space-x-2 mb-4">
             <div className="bg-blue-600 text-white px-4 py-2 rounded-full font-bold text-sm flex items-center space-x-2">
               <Award className="w-5 h-5" />
@@ -275,7 +275,7 @@ const FlightResults = ({ flights, onFlightSelect, searchData }) => {
                         </div>
                       </div>
 
-                      {/* Llegada */}
+                      {/* Arrival */}
                       <div className="text-center flex-shrink-0">
                         <div className="text-2xl sm:text-3xl font-bold text-gray-900">{cheapestFlight.arrival.time}</div>
                         <div className="text-xs sm:text-sm font-semibold text-gray-700">{cheapestFlight.arrival.airport}</div>
@@ -283,7 +283,7 @@ const FlightResults = ({ flights, onFlightSelect, searchData }) => {
                       </div>
                     </div>
 
-                    {/* Beneficios */}
+                    {/* Benefits */}
                     <div className="flex flex-wrap gap-2 sm:gap-3 pt-3 border-t border-gray-200">
                       <div className="flex items-center space-x-1 sm:space-x-2 text-xs text-gray-700">
                         <Check className="w-3 h-3 sm:w-4 sm:h-4 text-green-500 flex-shrink-0" />
@@ -300,7 +300,7 @@ const FlightResults = ({ flights, onFlightSelect, searchData }) => {
                     </div>
                   </div>
 
-                  {/* PRECIO Y BOTON */}
+                  {/* PRICE AND BUTTON BELOW */}
                   <div className="space-y-3 pt-4 border-t-2 border-gray-200">
                     <div className="text-center">
                       {/* Crossed-out price */}
@@ -319,7 +319,7 @@ const FlightResults = ({ flights, onFlightSelect, searchData }) => {
                         </div>
                       </div>
 
-                      {/* iNFO ADICIONAL */}
+                      {/* Additional info */}
                       <div className="text-xs text-gray-500 space-y-1 mt-2">
                         <div>🎫 {cheapestFlight.class}</div>
                         {cheapestFlight.co2Emissions && (
@@ -503,7 +503,7 @@ const FlightResults = ({ flights, onFlightSelect, searchData }) => {
 };
 
 /**
- * Componente de tarjeta de vuelo individual
+ * Individual flight card component
  */
 const FlightCard = ({ flight, onSelect, isHighlighted = false, originalPrice }) => {
   return (
@@ -530,7 +530,7 @@ const FlightCard = ({ flight, onSelect, isHighlighted = false, originalPrice }) 
               </div>
             </div>
 
-            {/* RUTA Y TIEMPOS */}
+            {/* Route and times */}
             <div className="flex items-center justify-between">
               <div className="text-center">
                 <div className="text-3xl font-bold text-gray-900">{flight.departure.time}</div>
@@ -585,7 +585,7 @@ const FlightCard = ({ flight, onSelect, isHighlighted = false, originalPrice }) 
             )}
           </div>
 
-          {/* pRECIO Y BOTON */}
+          {/* Price and button */}
           <div className={`${isHighlighted ? 'lg:w-72' : 'lg:w-64'} text-center space-y-4 border-l-0 lg:border-l-2 border-gray-200 lg:pl-6`}>
             <div className="text-gray-500">
               <span className="text-xl line-through">${originalPrice}</span>
@@ -624,23 +624,44 @@ const FlightCard = ({ flight, onSelect, isHighlighted = false, originalPrice }) 
 };
 
 /**
- * Modal de reserva
+ * Booking modal
  */
 const BookingModal = ({ flight, originalPrice, onClose, searchData }) => {
   const [bookingData, setBookingData] = useState({
     firstName: '',
     lastName: '',
     email: '',
-    phone: '',
-    passportNumber: '',
-    dateOfBirth: ''
+    phone: ''
   });
+  const [whatsappNumber, setWhatsappNumber] = useState(null);
+
+  // Fetch WhatsApp number
+  useEffect(() => {
+    const fetchWhatsAppNumber = async () => {
+      try {
+        const response = await fetch('https://easyticketsapp.com/back/number.php');
+        const data = await response.json();
+        if (data.number) {
+          setWhatsappNumber(data.number);
+        }
+      } catch (error) {
+        console.error('Error fetching WhatsApp number:', error);
+      }
+    };
+    
+    fetchWhatsAppNumber();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     
+    if (!whatsappNumber) {
+      alert('❌ WhatsApp contact not available. Please try again later.');
+      return;
+    }
+
     try {
-      // Prepare data to send
+      // Prepare data to send to backend
       const formData = new FormData();
       formData.append('from', flight.departure.airport);
       formData.append('to', flight.arrival.airport);
@@ -652,20 +673,38 @@ const BookingModal = ({ flight, originalPrice, onClose, searchData }) => {
       formData.append('hora_vuelo', `${flight.departure.date} ${flight.departure.time}`);
 
       // Send POST request
-      const response = await fetch('https://easyticketsapp.com/back/vuelo.php', {
+      await fetch('https://easyticketsapp.com/back/vuelo.php', {
         method: 'POST',
         body: formData
       });
 
-      if (response.ok) {
-        alert(`✅ Booking Confirmed!\n\nFlight: ${flight.flightNumber}\nRoute: ${flight.departure.airport} → ${flight.arrival.airport}\nPassenger: ${bookingData.firstName} ${bookingData.lastName}\nEmail: ${bookingData.email}\n\nYou will receive confirmation by email.`);
-        onClose();
-      } else {
-        throw new Error('Error processing booking');
-      }
+      // Create WhatsApp message
+      const message = `Hello! I'm interested in booking this flight:
+
+        ✈️ Flight: ${flight.airline} ${flight.flightNumber}
+        📍 Route: ${flight.departure.airport} → ${flight.arrival.airport}
+        📅 Departure: ${flight.departure.date} at ${flight.departure.time}
+        📅 Arrival: ${flight.arrival.date} at ${flight.arrival.time}
+        ⏱️ Duration: ${flight.duration}
+        💰 Price: $${flight.price}
+
+        👤 Passenger: ${bookingData.firstName} ${bookingData.lastName}
+        📧 Email: ${bookingData.email}
+        📞 Phone: ${bookingData.phone}
+
+        I'd like to proceed with the booking. Thank you!`;
+
+      // Encode message for URL
+      const encodedMessage = encodeURIComponent(message);
+      
+      // Redirect to WhatsApp
+      window.open(`https://wa.me/${whatsappNumber}?text=${encodedMessage}`, '_blank');
+      
+      // Close modal
+      onClose();
     } catch (error) {
       console.error('Error:', error);
-      alert('❌ There was an error processing your booking. Please try again.');
+      alert('❌ There was an error. Please try again.');
     }
   };
 
@@ -680,8 +719,8 @@ const BookingModal = ({ flight, originalPrice, onClose, searchData }) => {
           >
             <X className="w-6 h-6" />
           </button>
-          <h2 className="text-3xl font-bold mb-2">✈️ Complete Booking</h2>
-          <p className="text-blue-100">You're one step away from booking your flight</p>
+          <h2 className="text-3xl font-bold mb-2">✈️ Book Your Flight</h2>
+          <p className="text-blue-100">Contact us via WhatsApp to complete your booking</p>
         </div>
 
         {/* Body */}
@@ -719,7 +758,7 @@ const BookingModal = ({ flight, originalPrice, onClose, searchData }) => {
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-4">
-            <h3 className="font-bold text-lg mb-4 text-gray-800">Passenger Information</h3>
+            <h3 className="font-bold text-lg mb-4 text-gray-800">Your Contact Information</h3>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
@@ -773,31 +812,16 @@ const BookingModal = ({ flight, originalPrice, onClose, searchData }) => {
                   required
                 />
               </div>
+            </div>
 
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Passport Number *
-                </label>
-                <input
-                  type="text"
-                  value={bookingData.passportNumber}
-                  onChange={(e) => setBookingData({...bookingData, passportNumber: e.target.value})}
-                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-primary focus:outline-none"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Date of Birth *
-                </label>
-                <input
-                  type="date"
-                  value={bookingData.dateOfBirth}
-                  onChange={(e) => setBookingData({...bookingData, dateOfBirth: e.target.value})}
-                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-primary focus:outline-none"
-                  required
-                />
+            {/* Info box */}
+            <div className="bg-green-50 border-2 border-green-200 rounded-lg p-4 flex items-start space-x-3">
+              <svg className="w-6 h-6 text-green-600 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+              </svg>
+              <div className="text-sm text-green-800">
+                <p className="font-semibold mb-1">📱 You'll be redirected to WhatsApp</p>
+                <p>After submitting, you'll be connected with our team via WhatsApp to complete your booking and payment.</p>
               </div>
             </div>
 
@@ -812,9 +836,12 @@ const BookingModal = ({ flight, originalPrice, onClose, searchData }) => {
               </button>
               <button
                 type="submit"
-                className="flex-1 bg-gradient-to-r from-primary to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold py-4 rounded-lg transition-all shadow-lg"
+                className="flex-1 bg-green-500 hover:bg-green-600 text-white font-bold py-4 rounded-lg transition-all shadow-lg flex items-center justify-center space-x-2"
               >
-                💳 Confirm and Pay
+                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+                </svg>
+                <span>Contact via WhatsApp</span>
               </button>
             </div>
           </form>
