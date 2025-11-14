@@ -241,7 +241,7 @@ const SearchFlights = () => {
             <div className="text-sm text-blue-800">
               <p className="font-semibold mb-1">💡 Tips for better results:</p>
               <ul className="list-disc list-inside space-y-1">
-                <li>Write the city name or airport code (BOG, LAX, etc.)</li>
+                <li>Write the city name or airport code (MIA, DCA, JFK, etc.)</li>
                 <li>Search for flights at least 15 days in advance.</li>
                 <li>Flights during the week are usually cheaper</li>
               </ul>

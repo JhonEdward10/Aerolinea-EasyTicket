@@ -333,7 +333,7 @@ const FlightResults = ({ flights, onFlightSelect, searchData }) => {
                       onClick={() => handleFlightSelection(cheapestFlight)}
                       className="w-full py-3 rounded-lg font-bold text-sm transition-all bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 shadow-xl"
                     >
-                      🏆 Book Best Deal
+                      🏆 Get an offer
                     </button>
                   </div>
                 </div>
@@ -698,7 +698,7 @@ const BookingModal = ({ flight, originalPrice, onClose, searchData }) => {
       const encodedMessage = encodeURIComponent(message);
       
       // Redirect to WhatsApp
-      window.open(`https://wa.me/${whatsappNumber}?text=${encodedMessage}`, '_blank');
+       window.open(`https://wa.me/${whatsappNumber}?text=${encodedMessage}`, '_blank');
       
       // Close modal
       onClose();
