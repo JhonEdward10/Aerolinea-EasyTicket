@@ -152,7 +152,7 @@ const SearchFlights = () => {
                   value={searchData.departureDate}
                   onChange={handleChange}
                   min={today}
-                  className="input-field pl-10"
+                  className="input-field pl-10 py-3"
                   required
                 />
               </div>
@@ -174,7 +174,7 @@ const SearchFlights = () => {
                     value={searchData.returnDate}
                     onChange={handleChange}
                     min={searchData.departureDate || today}
-                    className="input-field pl-10"
+                    className="input-field pl-10 py-3"
                     required={tripType === 'roundTrip'}
                   />
                 </div>
@@ -189,7 +189,7 @@ const SearchFlights = () => {
                   name="passengers"
                   value={searchData.passengers}
                   onChange={handleChange}
-                  className="input-field pl-10"
+                  className="input-field pl-10 py-3"
                 >
                   {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
                     <option key={num} value={num}>
@@ -206,7 +206,7 @@ const SearchFlights = () => {
                 name="class"
                 value={searchData.class}
                 onChange={handleChange}
-                className="input-field"
+                className="input-field py-3"
               >
                 <option value="economy">Economic</option>
                 <option value="premium">Premium Economy</option>
@@ -309,4 +309,3 @@ const SearchFlights = () => {
 };
 
 export default SearchFlights;
-
