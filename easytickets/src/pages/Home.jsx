@@ -1,6 +1,7 @@
 import React from 'react';
 import Hero from '../components/Hero';
 import SearchFlights from '../components/SearchFlights';
+import Testimonials from '../components/Testimonials';
 
 const Home = () => {
   return (
@@ -50,6 +51,9 @@ const Home = () => {
           </div>
         </div>
       </section>
+
+      {/* Testimonials Section */}
+      <Testimonials />
 
       {/* Newsletter Section */}
       <section id="contacto" className="py-16 bg-gradient-to-r from-primary to-blue-900 text-white scroll-mt-20">
