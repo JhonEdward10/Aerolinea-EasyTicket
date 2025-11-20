@@ -9,7 +9,8 @@ const Testimonials = () => {
       rating: 5,
       comment: "Amazing service! Found the best deal for my trip to Paris. Saved over $400 compared to other sites. Highly recommend!",
       date: "2 weeks ago",
-      verified: true
+      verified: true,
+      photo: "/src/assets/sarah.jpg"
     },
     {
       name: "Michael Chen",
@@ -17,7 +18,8 @@ const Testimonials = () => {
       rating: 5,
       comment: "Customer service was excellent. They helped me find a last-minute flight and the process was super smooth. Will use again!",
       date: "1 month ago",
-      verified: true
+      verified: true,
+      photo: "/src/assets/michael.jpg"
     },
     {
       name: "Emily Rodriguez",
@@ -25,7 +27,8 @@ const Testimonials = () => {
       rating: 5,
       comment: "Best prices I've found online! Booked my family vacation and the whole experience was hassle-free. Thank you EasyTickets!",
       date: "3 weeks ago",
-      verified: true
+      verified: true,
+      photo: "/src/assets/emily.jpg"
     },
     {
       name: "David Thompson",
@@ -33,7 +36,8 @@ const Testimonials = () => {
       rating: 5,
       comment: "Fast booking process and great customer support. Got instant confirmation and the best price guaranteed. Very satisfied!",
       date: "1 week ago",
-      verified: true
+      verified: true,
+      photo: "/src/assets/david.jpg"
     },
     {
       name: "Jessica Williams",
@@ -41,7 +45,8 @@ const Testimonials = () => {
       rating: 5,
       comment: "I was skeptical at first, but EasyTickets delivered! Found an incredible deal to Europe and saved hundreds. Absolutely recommended!",
       date: "2 months ago",
-      verified: true
+      verified: true,
+      photo: "/src/assets/jessica.jpg"
     },
     {
       name: "Robert Anderson",
@@ -49,14 +54,15 @@ const Testimonials = () => {
       rating: 5,
       comment: "Professional and reliable service. They answered all my questions and helped me choose the best flight option. Great experience!",
       date: "3 weeks ago",
-      verified: true
+      verified: true,
+      photo: "/src/assets/robert.jpg"
     }
   ];
 
-  // Función para generar avatar con iniciales
-  const getAvatarUrl = (name) => {
-    return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random&color=fff&size=128&bold=true`;
-  };
+  // // Función para generar avatar con iniciales
+  // const getAvatarUrl = (name) => {
+  //   return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random&color=fff&size=128&bold=true`;
+  // };
 
   // Función para renderizar estrellas
   const renderStars = (rating) => {
@@ -101,9 +107,9 @@ const Testimonials = () => {
               <div className="flex items-center space-x-4 mb-4">
                 {/* Avatar */}
                 <img
-                  src={getAvatarUrl(testimonial.name)}
+                  src={testimonial.photo}
                   alt={testimonial.name}
-                  className="w-16 h-16 rounded-full border-4 border-primary shadow-md"
+                  className="w-16 h-16 rounded-full border-4 border-primary shadow-md object-cover"
                 />
                 
                 {/* Nombre y ubicación */}
