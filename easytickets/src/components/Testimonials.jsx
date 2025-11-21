@@ -1,7 +1,10 @@
-import React from 'react';
-import { Star, CheckCircle } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Star, CheckCircle, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const Testimonials = () => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+
   const testimonials = [
     {
       name: "Sarah Johnson",
@@ -59,10 +62,43 @@ const Testimonials = () => {
     }
   ];
 
-  // // Función para generar avatar con iniciales
-  // const getAvatarUrl = (name) => {
-  //   return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random&color=fff&size=128&bold=true`;
-  // };
+  // Auto-play: cambiar testimonio cada 5 segundos
+  useEffect(() => {
+    if (!isAutoPlaying) return;
+
+    const interval = setInterval(() => {
+      setCurrentIndex((prevIndex) => 
+        prevIndex === testimonials.length - 1 ? 0 : prevIndex + 1
+      );
+    }, 5000); // Cambia cada 5 segundos
+
+    return () => clearInterval(interval);
+  }, [isAutoPlaying, testimonials.length]);
+
+  // Navegar al siguiente testimonio
+  const nextTestimonial = () => {
+    setIsAutoPlaying(false);
+    setCurrentIndex((prevIndex) => 
+      prevIndex === testimonials.length - 1 ? 0 : prevIndex + 1
+    );
+  };
+
+  // Navegar al testimonio anterior
+  const prevTestimonial = () => {
+    setIsAutoPlaying(false);
+    setCurrentIndex((prevIndex) => 
+      prevIndex === 0 ? testimonials.length - 1 : prevIndex - 1
+    );
+  };
+
+  // Ir a un testimonio específico (dots)
+  const goToTestimonial = (index) => {
+    setIsAutoPlaying(false);
+    setCurrentIndex(index);
+  };
+
+  // Obtener el testimonio actual
+  const currentTestimonial = testimonials[currentIndex];
 
   // Función para renderizar estrellas
   const renderStars = (rating) => {
@@ -96,57 +132,96 @@ const Testimonials = () => {
           </div>
         </div>
 
-        {/* Grid de Testimonios */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {testimonials.map((testimonial, index) => (
-            <div
-              key={index}
-              className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 p-6 border-2 border-gray-100 hover:border-primary"
-            >
-              {/* Header del testimonial */}
-              <div className="flex items-center space-x-4 mb-4">
-                {/* Avatar */}
-                <img
-                  src={testimonial.photo}
-                  alt={testimonial.name}
-                  className="w-16 h-16 rounded-full border-4 border-primary shadow-md object-cover"
-                />
-                
-                {/* Nombre y ubicación */}
-                <div className="flex-1">
-                  <h3 className="font-bold text-gray-900 text-lg">
-                    {testimonial.name}
-                  </h3>
-                  <p className="text-sm text-gray-500">
-                    {testimonial.location}
-                  </p>
-                  {testimonial.verified && (
-                    <div className="flex items-center space-x-1 mt-1">
-                      <CheckCircle className="w-4 h-4 text-green-500" />
-                      <span className="text-xs text-green-600 font-semibold">
-                        Verified Purchase
-                      </span>
-                    </div>
-                  )}
-                </div>
+        {/* Carrusel de Testimonios */}
+        <div className="relative max-w-4xl mx-auto">
+          {/* Botón Anterior */}
+          <button
+            onClick={prevTestimonial}
+            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 md:-translate-x-12 z-10 bg-white hover:bg-gray-100 text-primary rounded-full p-3 shadow-lg transition-all duration-300 hover:scale-110"
+            aria-label="Previous testimonial"
+          >
+            <ChevronLeft className="w-6 h-6" />
+          </button>
+
+          {/* Botón Siguiente */}
+          <button
+            onClick={nextTestimonial}
+            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 md:translate-x-12 z-10 bg-white hover:bg-gray-100 text-primary rounded-full p-3 shadow-lg transition-all duration-300 hover:scale-110"
+            aria-label="Next testimonial"
+          >
+            <ChevronRight className="w-6 h-6" />
+          </button>
+
+          {/* Tarjeta del Testimonio */}
+          <div className="bg-white rounded-2xl shadow-2xl p-8 md:p-12 border-2 border-gray-100 transition-all duration-500">
+            {/* Header del testimonial */}
+            <div className="flex flex-col sm:flex-row items-center sm:items-start space-y-4 sm:space-y-0 sm:space-x-6 mb-6">
+              {/* Avatar */}
+              <img
+                src={currentTestimonial.photo}
+                alt={currentTestimonial.name}
+                className="w-24 h-24 rounded-full border-4 border-primary shadow-lg object-cover"
+              />
+              
+              {/* Nombre, ubicación y verificación */}
+              <div className="flex-1 text-center sm:text-left">
+                <h3 className="font-bold text-gray-900 text-2xl mb-1">
+                  {currentTestimonial.name}
+                </h3>
+                <p className="text-gray-500 mb-2">
+                  {currentTestimonial.location}
+                </p>
+                {currentTestimonial.verified && (
+                  <div className="flex items-center justify-center sm:justify-start space-x-1">
+                    <CheckCircle className="w-5 h-5 text-green-500" />
+                    <span className="text-sm text-green-600 font-semibold">
+                      Verified Purchase
+                    </span>
+                  </div>
+                )}
               </div>
 
               {/* Rating */}
-              <div className="flex items-center space-x-1 mb-3">
-                {renderStars(testimonial.rating)}
+              <div className="flex items-center space-x-1">
+                {renderStars(currentTestimonial.rating)}
               </div>
+            </div>
 
-              {/* Comentario */}
-              <p className="text-gray-700 leading-relaxed mb-3">
-                "{testimonial.comment}"
-              </p>
-
-              {/* Fecha */}
-              <p className="text-sm text-gray-400">
-                {testimonial.date}
+            {/* Comentario */}
+            <div className="mb-6">
+              <p className="text-gray-700 text-lg leading-relaxed italic">
+                "{currentTestimonial.comment}"
               </p>
             </div>
-          ))}
+
+            {/* Fecha */}
+            <p className="text-sm text-gray-400 text-center sm:text-left">
+              {currentTestimonial.date}
+            </p>
+          </div>
+
+          {/* Indicadores (Dots) */}
+          <div className="flex justify-center space-x-2 mt-8">
+            {testimonials.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => goToTestimonial(index)}
+                className={`transition-all duration-300 rounded-full ${
+                  index === currentIndex
+                    ? 'w-8 h-3 bg-primary'
+                    : 'w-3 h-3 bg-gray-300 hover:bg-gray-400'
+                }`}
+                aria-label={`Go to testimonial ${index + 1}`}
+              />
+            ))}
+          </div>
+
+          {/* Contador */}
+          <div className="text-center mt-4">
+            <span className="text-gray-500 text-sm">
+              {currentIndex + 1} / {testimonials.length}
+            </span>
+          </div>
         </div>
 
         {/* Call to Action */}
