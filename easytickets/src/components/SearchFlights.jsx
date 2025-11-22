@@ -88,15 +88,15 @@ const SearchFlights = () => {
 
   return (
     <>
-      <div id="buscar" className="bg-white rounded-2xl shadow-2xl p-6 md:p-8 -mt-16 relative z-10 max-w-6xl mx-auto scroll-mt-24">
-        <div className="flex space-x-4 mb-6">
+      <div id="buscar" className="bg-white rounded-2xl shadow-2xl p-4 md:p-6 -mt-16 relative z-10 max-w-6xl mx-auto scroll-mt-24">
+        <div className="flex space-x-3 mb-4">
           <button
             type="button"
             onClick={() => {
               setTripType('roundTrip');
               setSearchData(prev => ({ ...prev, returnDate: '' }));
             }}
-            className={`px-6 py-2 rounded-lg font-semibold transition-all duration-300 ${
+            className={`px-4 py-2 rounded-lg font-semibold transition-all duration-300 text-sm ${
               tripType === 'roundTrip'
                 ? 'bg-primary text-white'
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -110,7 +110,7 @@ const SearchFlights = () => {
               setTripType('oneWay');
               setSearchData(prev => ({ ...prev, returnDate: '' }));
             }}
-            className={`px-6 py-2 rounded-lg font-semibold transition-all duration-300 ${
+            className={`px-4 py-2 rounded-lg font-semibold transition-all duration-300 text-sm ${
               tripType === 'oneWay'
                 ? 'bg-primary text-white'
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -121,12 +121,12 @@ const SearchFlights = () => {
         </div>
 
         <form onSubmit={handleSubmit}>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
             <AirportSelector
               label="From"
               value={searchData.origin}
               onChange={handleOriginChange}
-              placeholder="Find your departure city or airport..."
+              placeholder="Buscar ciudad o aeropuerto de origen..."
               required
             />
 
@@ -134,25 +134,26 @@ const SearchFlights = () => {
               label="To"
               value={searchData.destination}
               onChange={handleDestinationChange}
-              placeholder="Search for destination city or airport..."
+              placeholder="Buscar ciudad o aeropuerto de destino..."
               required
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-3">
             <div className="relative">
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
+              <label className="block text-sm font-semibold text-gray-700 mb-1">
                 Departure Date <span className="text-red-500">*</span>
               </label>
               <div className="relative">
-                <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                 <input
                   type="date"
                   name="departureDate"
                   value={searchData.departureDate}
                   onChange={handleChange}
                   min={today}
-                  className="input-field pl-10 py-3"
+                  className="input-field pl-10 py-2 h-10 w-full appearance-none"
+                  style={{ WebkitAppearance: 'none', MozAppearance: 'none' }}
                   required
                 />
               </div>
@@ -163,18 +164,19 @@ const SearchFlights = () => {
 
             {tripType === 'roundTrip' && (
               <div className="relative">
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                <label className="block text-sm font-semibold text-gray-700 mb-1">
                   Return Date <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
-                  <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                  <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                   <input
                     type="date"
                     name="returnDate"
                     value={searchData.returnDate}
                     onChange={handleChange}
                     min={searchData.departureDate || today}
-                    className="input-field pl-10 py-3"
+                    className="input-field pl-10 py-2 h-10 w-full appearance-none"
+                    style={{ WebkitAppearance: 'none', MozAppearance: 'none' }}
                     required={tripType === 'roundTrip'}
                   />
                 </div>
@@ -182,14 +184,14 @@ const SearchFlights = () => {
             )}
 
             <div className="relative">
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Passengers</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">Passengers</label>
               <div className="relative">
-                <Users className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                <Users className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                 <select
                   name="passengers"
                   value={searchData.passengers}
                   onChange={handleChange}
-                  className="input-field pl-10 py-3"
+                  className="input-field pl-10 py-2 h-10 w-full"
                 >
                   {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
                     <option key={num} value={num}>
@@ -201,12 +203,12 @@ const SearchFlights = () => {
             </div>
 
             <div className="relative">
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Class</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">Class</label>
               <select
                 name="class"
                 value={searchData.class}
                 onChange={handleChange}
-                className="input-field py-3"
+                className="input-field py-2 h-10 w-full"
               >
                 <option value="economy">Economic</option>
                 <option value="premium">Premium Economy</option>
@@ -220,7 +222,7 @@ const SearchFlights = () => {
             <button 
               type="submit" 
               disabled={loading}
-              className="btn-primary px-12 py-4 text-lg flex items-center justify-center space-x-3 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="btn-primary px-8 py-3 text-base flex items-center justify-center space-x-3 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? (
                 <>
