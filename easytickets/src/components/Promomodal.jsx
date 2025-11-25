@@ -111,7 +111,7 @@ const PromoModal = () => {
                   className="flex items-center justify-center space-x-3 bg-secondary hover:bg-green-600 text-white font-bold py-4 px-6 rounded-lg transition-all shadow-lg transform hover:scale-105"
                 >
                   <Phone className="w-6 h-6" />
-                  <span className="text-2xl">1-650-263-1714</span>
+                  <span className="text-2xl">+1 (405) 316-9901</span>
                 </a>
               </div>
 

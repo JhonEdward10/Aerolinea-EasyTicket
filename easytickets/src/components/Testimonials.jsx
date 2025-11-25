@@ -229,12 +229,18 @@ const Testimonials = () => {
           <p className="text-gray-600 mb-4">
             Ready to join our happy travelers?
           </p>
-          <a
-            href="#search"
+          <button onClick={() => {
+            const searchSection = document.getElementById('buscar');
+            searchSection.scrollIntoView({ behavior: 'smooth' });
+            }} className="inline-block bg-primary hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105 mr-4">
+            Book Your Flight Now
+          </button>
+          {/* <button
+            href="#buscar"
             className="inline-block bg-primary hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105"
           >
             Book Your Flight Now
-          </a>
+          </button> */}
         </div>
       </div>
     </section>
