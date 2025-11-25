@@ -3,6 +3,7 @@ import { X } from 'lucide-react';
 
 const EmailCaptureModal = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [agreed, setAgreed] = useState(false);
@@ -26,7 +27,7 @@ const EmailCaptureModal = () => {
     localStorage.setItem('hasVisited', 'true');
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
     // Validar que ambos campos estén llenos
@@ -40,20 +41,120 @@ const EmailCaptureModal = () => {
       return;
     }
 
-    // Aquí puedes enviar los datos a tu backend
-    console.log('Data captured:', { email, phone });
-    
-    // Marcar que ya visitó
-    localStorage.setItem('hasVisited', 'true');
-    
-    // Cerrar modal
+    try {
+      console.log('📤 Enviando datos al backend...');
+      
+      // Crear FormData en vez de JSON
+      const formData = new FormData();
+      formData.append('email', email);
+      formData.append('phone', phone);
+      
+      console.log('📦 Datos a enviar (FormData):');
+      console.log('  - email:', email);
+      console.log('  - phone:', phone);
+      
+      // Enviar datos al endpoint banner.php
+      const response = await fetch('https://easyticketsapp.com/back/banner.php', {
+        method: 'POST',
+        body: formData  // Enviar FormData (sin Content-Type header)
+      });
+
+      console.log('📥 Respuesta del servidor:', response.status);
+
+      if (!response.ok) {
+        throw new Error(`Error del servidor: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log('✅ Datos guardados:', data);
+      
+      // Marcar que ya visitó
+      localStorage.setItem('hasVisited', 'true');
+      
+      // Mostrar modal de confirmación
+      setShowConfirmation(true);
+      
+    } catch (error) {
+      console.error('❌ Error al enviar datos:', error);
+      alert('There was an error saving your information. Please try again.');
+    }
+  };
+
+  const handleCloseConfirmation = () => {
+    setShowConfirmation(false);
     setIsVisible(false);
-    
-    // Opcional: Mostrar mensaje de éxito
-    alert('Thank you! Your $30 voucher code is: ASAP30');
   };
 
   if (!isVisible) return null;
+
+  // Modal de confirmación después de enviar datos
+  if (showConfirmation) {
+    return (
+      <div 
+        className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"
+        onClick={handleCloseConfirmation}
+      >
+        <div 
+          className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 text-center animate-fade-in"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* Botón cerrar */}
+          <button
+            onClick={handleCloseConfirmation}
+            className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
+          >
+            <X className="w-6 h-6" />
+          </button>
+
+          {/* Checkmark verde */}
+          <div className="mb-6 flex justify-center">
+            <div className="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center">
+              <svg className="w-12 h-12 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+          </div>
+
+          {/* Título */}
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">
+            Thank You!
+          </h2>
+
+          {/* Mensaje principal */}
+          <p className="text-gray-700 mb-2 text-lg font-semibold">
+            We received your information
+          </p>
+          
+          <p className="text-gray-600 mb-6">
+            An EasyTickets representative will contact you shortly to help you find the best flight deals.
+          </p>
+
+          {/* Info del cupón */}
+          <div className="bg-orange-50 border-2 border-secondary rounded-lg p-4 mb-6">
+            <p className="text-sm text-gray-700 mb-2">
+              Your <span className="font-bold text-primary">$30 OFF</span> Voucher code:
+            </p>
+            <div className="bg-secondary text-white font-bold text-2xl py-3 px-4 rounded inline-block">
+              ASAP30
+            </div>
+          </div>
+
+          {/* Mensaje adicional */}
+          <p className="text-sm text-gray-600 mb-6">
+            📞 Expect a call from us soon!
+          </p>
+
+          {/* Botón OK */}
+          <button
+            onClick={handleCloseConfirmation}
+            className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 rounded-lg transition-all shadow-lg"
+          >
+            Got it, thanks!
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -188,7 +289,7 @@ const EmailCaptureModal = () => {
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         @keyframes fade-in {
           from {
             opacity: 0;
