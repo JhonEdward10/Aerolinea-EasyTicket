@@ -2,10 +2,15 @@ import React from 'react';
 import Hero from '../components/Hero';
 import SearchFlights from '../components/SearchFlights';
 import Testimonials from '../components/Testimonials';
+import PromoModal from '../components/Promomodal';
+import EmailCaptureModal from '../components/Emailcapturemodal';
 
 const Home = () => {
   return (
     <div id="inicio" className='scroll-mt-20'>
+      
+      <EmailCaptureModal />
+      <PromoModal />
       <Hero />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

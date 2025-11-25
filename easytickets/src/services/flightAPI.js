@@ -1,5 +1,5 @@
 // Servicio para conectar con Google Flights 2 API de RapidAPI
-const API_KEY = '10559ca8d0msh6dc5df814352472p1ef606jsn1cf6172bf532';
+const API_KEY = 'ba3931c867msh2140615ccb6986cp1e735ejsn4147d855bc0f';
 const API_HOST = 'google-flights2.p.rapidapi.com';
 const BASE_URL = 'https://google-flights2.p.rapidapi.com/api/v1';
 
