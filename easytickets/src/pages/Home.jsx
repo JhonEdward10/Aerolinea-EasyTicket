@@ -4,11 +4,12 @@ import SearchFlights from '../components/SearchFlights';
 import Testimonials from '../components/Testimonials';
 import PromoModal from '../components/Promomodal';
 import EmailCaptureModal from '../components/Emailcapturemodal';
+import Newsletter from '../components/Newsletter';
 
 const Home = () => {
   return (
     <div id="inicio" className='scroll-mt-20'>
-      
+
       <EmailCaptureModal />
       <PromoModal />
       <Hero />
