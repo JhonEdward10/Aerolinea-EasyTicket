@@ -29,13 +29,19 @@ const EmailCaptureModal = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     
+    // Validar que ambos campos estén llenos
+    if (!email || !phone) {
+      alert('Please fill in both email and phone number');
+      return;
+    }
+    
     if (!agreed) {
       alert('Please agree to receive promotional messages');
       return;
     }
 
     // Aquí puedes enviar los datos a tu backend
-    console.log('Email captured:', { email, phone });
+    console.log('Data captured:', { email, phone });
     
     // Marcar que ya visitó
     localStorage.setItem('hasVisited', 'true');
@@ -117,9 +123,6 @@ const EmailCaptureModal = () => {
                 required
               />
 
-              {/* Separador */}
-              <div className="text-primary font-semibold text-sm">AND / OR</div>
-
               {/* Teléfono */}
               <div className="flex space-x-2">
                 <div className="flex items-center px-2 py-2.5 border border-gray-300 rounded-lg bg-gray-50">
@@ -144,6 +147,7 @@ const EmailCaptureModal = () => {
                   onChange={(e) => setPhone(e.target.value)}
                   placeholder="Phone"
                   className="flex-1 px-4 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                  required
                 />
               </div>
 
