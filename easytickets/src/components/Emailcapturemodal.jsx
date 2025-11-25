@@ -123,7 +123,19 @@ const EmailCaptureModal = () => {
               {/* Teléfono */}
               <div className="flex space-x-2">
                 <div className="flex items-center px-2 py-2.5 border border-gray-300 rounded-lg bg-gray-50">
-                  <span className="text-xl mr-1">🇺🇸</span>
+                  {/* Bandera USA como SVG */}
+                  <svg className="w-6 h-4 mr-1" viewBox="0 0 60 30" xmlns="http://www.w3.org/2000/svg">
+                    {/* Rayas rojas y blancas */}
+                    <rect width="60" height="30" fill="#B22234"/>
+                    <rect y="2.3" width="60" height="2.3" fill="#FFF"/>
+                    <rect y="6.9" width="60" height="2.3" fill="#FFF"/>
+                    <rect y="11.5" width="60" height="2.3" fill="#FFF"/>
+                    <rect y="16.1" width="60" height="2.3" fill="#FFF"/>
+                    <rect y="20.7" width="60" height="2.3" fill="#FFF"/>
+                    <rect y="25.3" width="60" height="2.3" fill="#FFF"/>
+                    {/* Cuadro azul con estrellas */}
+                    <rect width="24" height="13.8" fill="#3C3B6E"/>
+                  </svg>
                   <span className="text-xs font-semibold">US</span>
                 </div>
                 <input
@@ -192,19 +204,3 @@ const EmailCaptureModal = () => {
 };
 
 export default EmailCaptureModal;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
