@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
+import CountrySelector from './Countryselector ';
 
 const EmailCaptureModal = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
+  const [country, setCountry] = useState({ code: 'US', name: 'United States', dialCode: '+1', flag: '🇺🇸' });
   const [agreed, setAgreed] = useState(false);
 
   useEffect(() => {
@@ -47,11 +49,13 @@ const EmailCaptureModal = () => {
       // Crear FormData en vez de JSON
       const formData = new FormData();
       formData.append('email', email);
-      formData.append('phone', phone);
+      formData.append('phone', `${country.dialCode} ${phone}`); // Incluir código de país
+      formData.append('country', country.code);
       
       console.log('📦 Datos a enviar (FormData):');
       console.log('  - email:', email);
-      console.log('  - phone:', phone);
+      console.log('  - phone:', `${country.dialCode} ${phone}`);
+      console.log('  - country:', country.code);
       
       // Enviar datos al endpoint banner.php
       const response = await fetch('https://easyticketsapp.com/back/banner.php', {
@@ -226,27 +230,15 @@ const EmailCaptureModal = () => {
 
               {/* Teléfono */}
               <div className="flex space-x-2">
-                <div className="flex items-center px-2 py-2.5 border border-gray-300 rounded-lg bg-gray-50">
-                  {/* Bandera USA como SVG */}
-                  <svg className="w-6 h-4 mr-1" viewBox="0 0 60 30" xmlns="http://www.w3.org/2000/svg">
-                    {/* Rayas rojas y blancas */}
-                    <rect width="60" height="30" fill="#B22234"/>
-                    <rect y="2.3" width="60" height="2.3" fill="#FFF"/>
-                    <rect y="6.9" width="60" height="2.3" fill="#FFF"/>
-                    <rect y="11.5" width="60" height="2.3" fill="#FFF"/>
-                    <rect y="16.1" width="60" height="2.3" fill="#FFF"/>
-                    <rect y="20.7" width="60" height="2.3" fill="#FFF"/>
-                    <rect y="25.3" width="60" height="2.3" fill="#FFF"/>
-                    {/* Cuadro azul con estrellas */}
-                    <rect width="24" height="13.8" fill="#3C3B6E"/>
-                  </svg>
-                  <span className="text-xs font-semibold">US</span>
-                </div>
+                <CountrySelector
+                  value={country.code}
+                  onChange={setCountry}
+                />
                 <input
                   type="tel"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  placeholder="Phone"
+                  placeholder={`Phone (${country.dialCode})`}
                   className="flex-1 px-4 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                   required
                 />
