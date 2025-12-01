@@ -88,7 +88,7 @@ const SearchFlights = () => {
 
   return (
     <>
-      <div id="buscar" className="bg-white rounded-2xl shadow-2xl p-4 md:p-6 -mt-16 relative z-10 max-w-6xl mx-auto scroll-mt-24">
+      <div className="bg-white rounded-2xl shadow-2xl p-4 md:p-6 -mt-16 relative z-10 max-w-6xl mx-auto scroll-mt-24">
         <div className="flex space-x-3 mb-4">
           <button
             type="button"

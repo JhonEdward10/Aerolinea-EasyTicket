@@ -60,7 +60,7 @@ const SearchHero = () => {
   }, [destinations.length]);
 
   return (
-    <section id='buscar' className="relative min-h-[85vh] flex items-center overflow-hidden pt-11">
+    <section className="relative min-h-[85vh] flex items-center overflow-hidden pt-11">
       {/* Carrusel de imágenes de fondo */}
       <div className="absolute inset-0 w-full h-full">
         {destinations.map((destination, index) => (

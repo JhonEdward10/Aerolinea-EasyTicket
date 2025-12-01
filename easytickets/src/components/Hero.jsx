@@ -3,10 +3,10 @@ import { ArrowRight } from 'lucide-react';
 
 const Hero = () => {
   return (
-    <div className="relative bg-gradient-to-r from-primary to-blue-900 text-white">
+    <div id="buscar" className="relative bg-gradient-to-r from-primary to-blue-900 text-white">
       <div className="absolute inset-0 bg-black opacity-40"></div>
       
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32">
+      <div  className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32">
         <div className="text-center space-y-6">
           <h1 className="text-4xl md:text-6xl font-bold leading-tight">
             Travel Where Your Dreams 
