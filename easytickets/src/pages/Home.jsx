@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import Hero from '../components/Hero';
+import React from 'react';
 import SearchFlights from '../components/SearchFlights';
+import Hero from '../components/Hero';
+import SearchHero from '../components/SearchHero';
 import Testimonials from '../components/Testimonials';
 import PromoModal from '../components/Promomodal';
 import EmailCaptureModal from '../components/Emailcapturemodal';
@@ -12,11 +13,12 @@ const Home = () => {
 
       <EmailCaptureModal />
       <PromoModal />
-      <Hero />
       
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <SearchFlights />
-      </div>
+      {/* SearchHero con carrusel de imágenes de fondo */}
+      <SearchHero />
+
+      {/* Hero SEGUNDO - después del buscador */}
+      <Hero />
 
       {/* Simple CTA Section */}
       <section className="py-16 bg-gray-50 mt-16">
@@ -69,3 +71,29 @@ const Home = () => {
 };
 
 export default Home;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
