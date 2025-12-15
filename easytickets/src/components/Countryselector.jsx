@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { ChevronDown } from 'lucide-react';
-import FlagIcon from './FlagIcon';
+import FlagIcon from './FlagIcon.jsx';
 import { countries } from '../data/countries.js';
 
 const CountrySelector = ({ value, onChange, placeholder = "Select country" }) => {

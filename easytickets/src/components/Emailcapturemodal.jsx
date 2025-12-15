@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
-import CountrySelector from './Countryselector ';
+import CountrySelector from './Countryselector.jsx';
 
 const EmailCaptureModal = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -32,14 +32,9 @@ const EmailCaptureModal = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Validar que ambos campos estén llenos
-    if (!email || !phone) {
-      alert('Please fill in both email and phone number');
-      return;
-    }
-    
-    if (!agreed) {
-      alert('Please agree to receive promotional messages');
+    // Validar solo que el email esté lleno (teléfono y checkbox son opcionales)
+    if (!email) {
+      alert('Please enter your email');
       return;
     }
 
@@ -49,13 +44,15 @@ const EmailCaptureModal = () => {
       // Crear FormData en vez de JSON
       const formData = new FormData();
       formData.append('email', email);
-      formData.append('phone', `${country.dialCode} ${phone}`); // Incluir código de país
+      formData.append('phone', phone ? `${country.dialCode} ${phone}` : ''); // Vacío si no hay teléfono
       formData.append('country', country.code);
+      formData.append('agreed', agreed ? 'yes' : 'no'); // Indicar si aceptó o no
       
       console.log('📦 Datos a enviar (FormData):');
       console.log('  - email:', email);
-      console.log('  - phone:', `${country.dialCode} ${phone}`);
+      console.log('  - phone:', phone ? `${country.dialCode} ${phone}` : 'No proporcionado');
       console.log('  - country:', country.code);
+      console.log('  - agreed:', agreed ? 'yes' : 'no');
       
       // Enviar datos al endpoint banner.php
       const response = await fetch('https://easyticketsapp.com/back/banner.php', {
@@ -182,7 +179,7 @@ const EmailCaptureModal = () => {
 
           {/* Contenido */}
           <div className="p-6 text-center">
-            {/* Icono de sobre con cupón - MÁS PEQUEÑO */}
+            {/* Icono de sobre con cupón */}
             <div className="mb-4">
               <svg className="w-20 h-20 mx-auto" viewBox="0 0 200 200" fill="none">
                 {/* Sobre NARANJA */}
@@ -238,9 +235,8 @@ const EmailCaptureModal = () => {
                   type="tel"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  placeholder={`Phone (${country.dialCode})`}
+                  placeholder={`Phone (${country.dialCode}) - Optional`}
                   className="flex-1 px-4 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                  required
                 />
               </div>
 
@@ -252,7 +248,6 @@ const EmailCaptureModal = () => {
                   checked={agreed}
                   onChange={(e) => setAgreed(e.target.checked)}
                   className="mt-0.5 mr-2 w-3.5 h-3.5"
-                  required
                 />
                 <label htmlFor="agree" className="text-xs">
                   I agree to receive promotional SMS texts via an autodialer, and this agreement isn't a condition of purchase. I also agree to{' '}
